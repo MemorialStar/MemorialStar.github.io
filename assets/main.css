@@ -23,6 +23,7 @@ body {
 }
 
 #div2 {
+  color: red;
   margin-top: 2rem;
   padding: 1rem;
   border: 1px solid #333;
