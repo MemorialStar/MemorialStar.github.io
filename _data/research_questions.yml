@@ -1,0 +1,11 @@
+- title: "Research Goal 1"
+  details:
+    - question: "Ipsum Lorem Delta Sit"
+      explanation: "Here’s the full explanation of why we ask this question…"
+    - question: "Ipsum Lorem Delta Sit"
+      explanation: "Another insight into that question…"
+
+- title: "Research Goal 2"
+  details:
+    - question: "A second goal’s detail question"
+      explanation: "Explanation for the second goal’s detail."

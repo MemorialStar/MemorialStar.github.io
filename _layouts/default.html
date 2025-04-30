@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ page.title | default: "My Portfolio" }}</title>
+  <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+</head>
+<body>
+  {{ content }}
+  <script src="{{ '/assets/main.js' | relative_url }}"></script>
+</body>
+</html>
