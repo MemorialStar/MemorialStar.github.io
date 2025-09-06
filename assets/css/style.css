@@ -1,7 +1,8 @@
 /* Font-face declaration for custom font */
 @font-face {
     font-family: 'normal-haas';
-    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-35Thin-Trial.otf" | relative_url }}') format('opentype');
+    
+    src: url('../fonts/NeueHaasGrotDispRound-35Thin-Trial.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -9,7 +10,7 @@
 
 @font-face {
     font-family: 'normal-helv';
-    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Lt.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/HelveticaNeueLTPro-Lt.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -17,7 +18,7 @@
 
 @font-face {
     font-family: 'point-helv';
-    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Th.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/HelveticaNeueLTPro-Th.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -26,7 +27,7 @@
 /* Font-face declaration for alignment target custom font */
 @font-face {
     font-family: 'bold-haas';
-    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-65Medium-Trial.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/NeueHaasGrotDispRound-65Medium-Trial.otf') format('opentype');
     font-weight: bold;
     font-style: bold;
     font-display: swap;
@@ -34,7 +35,7 @@
 
 @font-face {
     font-family: 'bold-helv';
-    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-ThEx.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/HelveticaNeueLTPro-ThEx.otf') format('opentype');
     font-weight: bold;
     font-style: bold;
     font-display: swap;
@@ -42,7 +43,7 @@
 
 @font-face {
     font-family: 'title-helv';
-    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Th.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/HelveticaNeueLTPro-Th.otf') format('opentype');
     font-weight: bold;
     font-style: bold;
     font-display: swap;
@@ -50,7 +51,7 @@
 
 @font-face {
     font-family: 'title-haas';
-    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-35Thin-Trial.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/NeueHaasGrotDispRound-35Thin-Trial.otf') format('opentype');
     font-weight: bold;
     font-style: bold;
     font-display: swap;
@@ -58,7 +59,7 @@
 
 @font-face {
     font-family: 'target-helv';
-    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Roman.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/HelveticaNeueLTPro-Roman.otf') format('opentype');
     font-weight: bold;
     font-style: bold;
     font-display: swap;
@@ -66,7 +67,7 @@
 
 @font-face {
     font-family: 'target-haas';
-    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-65Medium-Trial.otf" | relative_url }}') format('opentype');
+    src: url('../fonts/NeueHaasGrotDispRound-65Medium-Trial.otf') format('opentype');
     font-weight: bold;
     font-style: bold;
     font-display: swap;
@@ -139,7 +140,7 @@ body::before{
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('{{ "/assets/background2m.png" | relative_url }}');
+    background-image: url('../img/background2m.png');
     background-repeat: repeat;
     mix-blend-mode: multiply;
     opacity: 0.2;
@@ -218,7 +219,7 @@ body::before{
     width: 100%;
     height: 100%;
 
-    background-image: linear-gradient(rgb(17, 48, 121), rgba(0,0,0,1)), url('{{ "/assets/img/gh.png" | relative_url }}');
+    background-image: linear-gradient(rgb(17, 48, 121), rgba(0,0,0,1)), url('../img/gh.png');
     background-size: auto 100%;
     background-repeat: repeat; 
     background-blend-mode: screen;    

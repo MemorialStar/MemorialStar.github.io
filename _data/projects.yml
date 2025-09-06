@@ -1,0 +1,34 @@
+- title: "Taxel-based Color Representation, TaCo"
+  year: "2024"
+  tags: ["Augmentation", "Affective"]
+  detail: "Unique way of representing colors using tactical symbols called *Taxels* for blinds"
+  explanation: "Designed and developed 'Taxel,' a novel system that translates HSV color components into a library of unique tactile patterns to improve data accessibility for visually impaired users."
+  image: "/assets/img/projects/taco.png"
+
+- title: "Digital Content Inspector"
+  year: "2023"
+  tags: ["Augmentation", "Context"]
+  detail: "Novel UI analysis program to *enhance web accessibility for the elderly*"
+  explanation: "This system analyzes web content based on a newly established set of UI/UX guidelines tailored specifically to the cognitive and physical needs of senior citizens."
+  image: "/assets/img/projects/DCI.png"
+
+- title: "WAT Series - WatApp & WatBand"
+  year: "2022"
+  tags: ["Augmentation", "Intention"]
+  detail: "Wearable Smoking Detection Device & Mobile Application for smoking cessation based on CBT"
+  explanation: "This system aims to overcome the limitations of self-reported data in smoking cessation programs. It uses both multi-sensor device and a mobile app to automatically detects and records users' smoking behaviors in real-time for both users and counselors to facilitate effective CBT."
+  image: "/assets/img/projects/watseries.png"
+
+- title: "REWIND"
+  year: "2021-2022"
+  tags: ["Augmentation", "Affective"]
+  detail: "Stock information service that visualizes past stock charts through sentiment analysis"
+  explanation: "Analyzes public sentiment toward each financial event by collecting opinions on social media and then visualizes them chronologically along with the stock chart. This allows users to review stock market movements and record their thoughts. Users can gain their own insights into current stock market events and make wiser decisions."
+  image: "/assets/img/projects/rewind.jpg"
+
+- title: "BetterSelf"
+  year: "2021"
+  tags: ["Augmentation", "Intention", "Context"]
+  detail: "A mobile application for sustainable weight management using bio-data"
+  explanation: "Delivers an integrated diet solution that promotes sustainable weight management by reframing dieting as a lifestyle change, helping to reduce the body's starvation response. It semi-automatically collects and analyzes bio-data and guide users to more healthy, sustainable way of diet: including meal regularity, physical activity, stress, and sleep patterns."
+  image: "/assets/img/projects/betterself.png"

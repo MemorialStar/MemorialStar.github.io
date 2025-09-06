@@ -1,0 +1,55 @@
+main:
+  target: "How can AI guide us toward a more meaningful and purposeful existence in an increasingly complex world?"
+  target_class: "align-target-main"
+  content: |
+    I am an undergraduate student at KAIST with a passion for exploring
+    how technology can enhance human wisdom and well-being.
+    My research vision aligns with:
+
+vision:
+  target: "My research vision aligns with"
+  target_class: "align-target"
+  subgoals:
+    - subgoal: "Hierarchical Context Understanding"
+      quote: "말과 나와 사람들에게 무엇을 원하는지 묻어보라고 들여보낸 그들은 더 빨리 될 것이다."
+      ref: "- Henry Ford"
+      examples:
+        - "사용자가 소설의 '더 좋은 결말'을 요청했을 때, AI가 단순히 비극적인 사건을 추가하는 대신, 작품 전체를 관통하는 '상실'이라는 주제를 파악하고, 그 주제를 실현시키는 여러 있는 결말을 함께 구상할 수 있을까?"
+        - "AI가 데이터를 생성하는 과정에서 주어진 표면적인 목적, 실행, 조건, 맥락 발굴 아니라, 그 데이터를 라이프 사이클 전반과 이해하고 추론할 수 있을까?"
+        - "우리가 말로 정확히 설명하기 어려운 아쉬워 간접. 편견. 느낌, 편견. 등을 AI가 더 맞췌 습득과 기대보다 좋은 결론에 도달할 수 있을까?"
+      detail: |
+        숙련된 요가 선생님은 초보자들에게서는 보이지 않는 미세한 습득과 재능이 있다면 하지 않습니다. AI도 이처럼 '지금 오디어 읽을 주어' 즉이 한없이 학습할 수 있어야 합니다. 
+        
+        MI는 맞춤 의료 수집자들에게는 "치료해주세요"라는 요청 뒤에 깔린 실제 의료정보와 주제를 파악하도록 도와야 합니다. 또한 이렇듯 계층적 거쳐먹을 수 있을까?
+
+    - subgoal: "Deep Behavioral Analysis & Response Generation"
+      quote: "사람들은 합리성에 따라 행동하지 않지만, 그들이 비합리적이라는 뜻은 아니다."
+      ref: "- Dan Ariely"
+      examples:
+        - "사용자가 실제로는 도움을 원하지만 '괜찮다'고 말할 때, AI가 표면적 응답이 아닌 진정한 니즈를 파악할 수 있을까?"
+        - "반복적으로 같은 실수를 하는 사용자에게 AI가 단순히 정보를 제공하는 것이 아니라, 행동 변화를 이끌어낼 수 있는 맞춤형 접근법을 제시할 수 있을까?"
+        - "AI가 사용자의 감정 상태와 인지적 편향을 고려하여 정보를 전달하는 최적의 타이밍과 방식을 찾을 수 있을까?"
+      detail: |
+        인간의 행동은 복잡한 감정, 인지편향, 사회적 맥락의 조합입니다. 현재의 AI는 정보 제공에는 뛰어나지만, 이러한 심층적 행동 패턴을 이해하고 적절히 반응하는 데는 한계가 있습니다.
+        
+        Deep Behavioral Analysis는 표면적 요청 너머의 진정한 동기와 니즈를 파악하고, 개인의 인지적, 감정적 특성에 맞는 최적의 응답을 생성하는 것을 목표로 합니다.
+
+    - subgoal: "Adaptive Intelligence & Wisdom Cultivation"
+      quote: "지혜는 지식을 올바른 방향으로 사용하는 것이다."
+      ref: "- Ancient Proverb"
+      examples:
+        - "사용자가 잘못된 방향으로 가고 있을 때 AI가 이를 감지하고 자연스럽게 더 나은 방향으로 안내할 수 있을까?"
+        - "정보 제공을 넘어서 사용자의 사고 과정 자체를 개선하고 지혜를 기를 수 있도록 도울 수 있을까?"
+        - "AI가 사용자와의 상호작용을 통해 지속적으로 학습하며, 개인의 성장 단계에 맞는 적응적 지원을 제공할 수 있을까?"
+      detail: |
+        현재의 AI는 방대한 지식을 보유하고 있지만, 사용자가 잘못된 방향으로 향할 때 이를 감지하고 더 나은 길로 인도하는 지혜는 부족합니다.
+        
+        Adaptive Intelligence는 단순한 정보 제공을 넘어서, 사용자의 장기적 웰빙과 성장을 고려한 지혜로운 조언과 안내를 제공하는 것을 목표로 합니다. 이는 jhana states 연구에서 발견한 인간의 놀라운 적응력과 지혜 함양 능력에서 영감을 받았습니다.
+
+projects:
+  target: "Selected Projects"
+  target_class: "align-target"
+
+publications:
+  target: "Publications"
+  target_class: "align-target"

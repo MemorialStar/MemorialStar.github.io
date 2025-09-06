@@ -1,0 +1,21 @@
+name: "YOUNG MIN, JUNG."
+degree: "B.Sc at KAIST"
+department: |
+  School of Transdisciplinary Studies
+  Dept. Mechanical Eng.
+  School of Computing
+location: "Daejeon, South Korea"
+
+social_links:
+  - name: "CV"
+    url: "https://example.com"
+  - name: "LinkedIn"
+    url: "https://example.com"
+  - name: "X"
+    url: "https://example.com"
+  - name: "Email"
+    url: "mailto:your-email@example.com"
+
+profile_image: "assets/img/me.jpg"
+
+

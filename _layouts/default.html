@@ -6,7 +6,7 @@
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
     
     <link rel="icon" type="image/svg+xml" href="{{ site.data.site_info.favicon | relative_url }}">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ 'assets/css/style.css' | relative_url }}">
 </head>
 <body>
     <!-- Page Wrapper -->
@@ -78,6 +78,6 @@
         window.jekyllData = JSON.parse(document.getElementById('jekyll-data').textContent);
     </script>
     
-    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+    <script src="{{ 'assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>
