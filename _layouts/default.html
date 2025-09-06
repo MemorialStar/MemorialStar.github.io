@@ -1,12 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>{{ page.title | default: "My Portfolio" }}</title>
-  <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+    
+    <link rel="icon" type="image/svg+xml" href="{{ site.data.site_info.favicon | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
-  {{ content }}
-  <script src="{{ '/assets/main.js' | relative_url }}"></script>
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <!-- background layer -->
+        <div class="background-image-layer"></div>
+        <!-- Left Pink Margin -->
+        <div class="left-margin"></div>
+        
+        <!-- Right Pink Margin -->
+        <div class="right-margin"></div>
+        
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Sky Blue Gap -->
+            <div class="sky-blue-gap"></div>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Right Content Column -->
+                <main class="content-column">
+                    <div class="content-area" id="contentArea">
+                        {{ content }}
+                    </div>
+                </main>
+            </div>
+
+            <!-- Right Margin in Main Container -->
+            <div class="main-container-right-margin"></div>
+        </div>
+    </div>
+    
+    <!-- Fixed Navigation Column -->
+    <nav class="nav-column">
+        <!-- Vertical Divider Line inside yellow column -->
+        <div class="vertical-divider" id="verticalDivider"></div>
+        
+        <div class="nav-container" id="navsubContainer"></div>
+
+        <div class="nav-container" id="navContainer">
+            <div class="nav-item active" data-section="1">
+                <span>Main</span>
+            </div>
+            <div class="nav-item" data-section="2">
+                <span>Vision</span>
+            </div>
+            <div class="nav-item" data-section="3">
+                <span>Projects</span>
+            </div>
+            <div class="nav-item" data-section="4">
+                <span>Publications</span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Jekyll 데이터를 JavaScript로 안전하게 전달 -->
+    <script type="application/json" id="jekyll-data">
+        {
+            "siteInfo": {{ site.data.site_info | jsonify }},
+            "projects": {{ site.data.projects | jsonify }},
+            "publications": {{ site.data.publications | jsonify }},
+            "news": {{ site.data.news | jsonify }},
+            "sections": {{ site.data.sections | jsonify }}
+        }
+    </script>
+    
+    <script>
+        // JSON 데이터를 안전하게 파싱
+        window.jekyllData = JSON.parse(document.getElementById('jekyll-data').textContent);
+    </script>
+    
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
 </body>
 </html>

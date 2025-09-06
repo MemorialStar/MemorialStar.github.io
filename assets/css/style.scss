@@ -1,0 +1,1052 @@
+/* Font-face declaration for custom font */
+@font-face {
+    font-family: 'normal-haas';
+    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-35Thin-Trial.otf" | relative_url }}') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'normal-helv';
+    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Lt.otf" | relative_url }}') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'point-helv';
+    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Th.otf" | relative_url }}') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Font-face declaration for alignment target custom font */
+@font-face {
+    font-family: 'bold-haas';
+    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-65Medium-Trial.otf" | relative_url }}') format('opentype');
+    font-weight: bold;
+    font-style: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'bold-helv';
+    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-ThEx.otf" | relative_url }}') format('opentype');
+    font-weight: bold;
+    font-style: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'title-helv';
+    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Th.otf" | relative_url }}') format('opentype');
+    font-weight: bold;
+    font-style: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'title-haas';
+    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-35Thin-Trial.otf" | relative_url }}') format('opentype');
+    font-weight: bold;
+    font-style: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'target-helv';
+    src: url('{{ "/assets/fonts/HelveticaNeueLTPro-Roman.otf" | relative_url }}') format('opentype');
+    font-weight: bold;
+    font-style: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'target-haas';
+    src: url('{{ "/assets/fonts/NeueHaasGrotDispRound-65Medium-Trial.otf" | relative_url }}') format('opentype');
+    font-weight: bold;
+    font-style: bold;
+    font-display: swap;
+}
+
+/* CSS Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 12px; /* Set 1rem = 12pt */
+    color: var(--main-color);
+}
+
+/* 기본 html, body 스타일 */
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: 'normal-helv';
+    overflow-x: hidden;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+body {
+    position: relative; /* ::before 가상 요소의 기준점 */
+}
+
+p {
+    white-space: pre-line;
+}
+
+span {
+    white-space: pre-line;
+}
+
+h3 {
+    white-space: pre-line;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* unvisited */
+a:link {
+  color: var(--accent-color); 
+}
+
+/* visited */
+a:visited {
+  color: var(--accent-color)
+}
+
+/* hover */
+a:hover {
+  color: var(--white-color);
+  background: var(--main-color);
+  text-decoration: none;
+}
+
+/* 텍스처를 위한 가상 요소(::before) 추가 */
+body::before{
+    content: ''; /* 가상 요소 필수 속성 */
+    position: fixed; /* 화면 전체에 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('{{ "/assets/background2m.png" | relative_url }}');
+    background-repeat: repeat;
+    mix-blend-mode: multiply;
+    opacity: 0.2;
+    pointer-events: none; /* 클릭 등 상호작용 무시 */
+    z-index: 9999;
+}
+
+/* Color Variables */
+:root {
+    --main-color: #373633;
+    --sub-color: grey;
+    --accent-color: #2E75CD;
+    --background-color: #113179;
+    /* --background-color: #112c43; */
+    --white1: #E9F0FE;
+    --white2: #D4D5ED;
+    --white-color: #f7f9fd;
+    --line-color: #373633;
+}
+
+/* Typography Style Variables */
+:root {
+    /* Style 1: 16px, 22px, 1px - For CV/LinkedIn/Mail links */
+    --text-style-sub-size: 16px;
+    --text-style-sub-height: 20px;
+    --text-style-sub-spacing: 0px;
+    
+    /* Style 2: 40px, 52px, 5px - For nav-items and info-section-2 */
+    --text-style-nav-size: 40px;
+    --text-style-nav-height: 52px;
+    --text-style-nav-spacing: 0px;
+    
+    /* Style 3: 24px, 32px, 3px - For align-targets (except Main) and info-section-3 */
+    --text-style-target-size: 30px;
+    --text-style-target-height: 36px;
+    --text-style-target-spacing: 0px;
+    
+    /* Style 4: 20px, 26px, 1px - For all other text */
+    --text-style-body-size: 20px;
+    --text-style-body-height: 26px;
+    --text-style-body-spacing: -0.05px;
+
+    /* nav length */
+    --gap-width: 40px;
+    --main-margin: min(200px, calc((100vw / 8)));
+    --main-container-margin: min(250px, calc((100vw/8)));
+    --nav-length: max(275px, calc((100vw - 2*var(--main-margin) - var(--gap-width)) / 6));
+
+    /*main content padding*/
+    --main-contents-padding: 5rem;
+    --nav-horizontal-line-length: calc(15px + 19rem);
+    
+    /* Me.png image variables */
+    --me-image-height: 16rem;
+    --me-image-width: 12rem;
+    
+    /* News section variables */
+    --news-title-font-size: 16px;
+    --news-year-font-size: 12px;
+    --news-content-font-size: 12px;
+    --news-elements-gap: 2px;
+}
+
+/* Page Wrapper with Pink Side Margins */
+.page-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    position: relative;
+}
+
+.background-image-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-image: linear-gradient(rgb(17, 48, 121), rgba(0,0,0,1)), url('{{ "/assets/img/gh.png" | relative_url }}');
+    background-size: auto 100%;
+    background-repeat: repeat; 
+    background-blend-mode: screen;    
+}
+
+/* Left White Margin - 1/8 screen width minus 1rem */
+.left-margin {
+    width: var(--main-margin);
+    background-color: var(--white-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1;
+}
+
+/* Right White Margin - exactly 1/8 screen width */
+.right-margin {
+    width: var(--main-margin);
+    background-color: var(--white-color);
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    z-index: 1;
+}
+
+/* Right White Margin - exactly 1/8 screen width */
+.main-container-right-margin {
+    width: var(--main-container-margin);
+    background-color: var(--white-color);
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+/* Main Content Container */
+.main-container {
+    flex: 1;
+    margin-left: var(--main-margin);
+    margin-right: var(--main-margin);
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+    letter-spacing: 1px;
+}
+
+/* Sky Blue Gap (40px) - reveals background */
+.sky-blue-gap {
+    width: var(--gap-width);
+    background-color: transparent; /* Transparent to show body background */
+    flex-shrink: 0;
+}
+
+/* Content Wrapper (Only Green column now) */
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    position: relative;
+}
+
+/* Left Navigation Column (White) - Fixed position */
+.nav-column {
+    background-color: var(--white-color);
+    position: fixed; /* Fixed to viewport */
+    left: calc(var(--main-margin) + var(--gap-width)); /* After gap */
+    top: 0;
+    bottom: 0;
+    width: var(--nav-length); /* Dynamic width calculation */
+    z-index: 10;
+}
+
+/* Navigation Container - Fixed to bottom */
+#navContainer {
+    width: 100%;
+    position: absolute;
+    bottom: 15px; /* 15px from bottom of screen */
+}
+
+#navsubContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    width: var(--nav-horizontal-line-length);
+    top: calc(10vh + var(--text-style-sub-size) + 8px);
+    z-index: 5;
+    /* Animation support for navsubContainer */
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+/* NavsubContainer slide animations */
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.navsubContainer-slide-out {
+    animation-name: slideOutRight;
+}
+
+.navsubContainer-slide-in {
+    animation-name: slideInRight;
+}
+
+/* Me.png image styling */
+.me-image {
+    position: relative;
+    width: var(--me-image-width);
+    height: var(--me-image-height);
+    background-color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: 3rem;
+}
+
+/* News section styling */
+.news-section {
+    position: relative;
+    width: 100%;
+    pointer-events: auto; /* Allow interactions on this element */
+}
+
+.news-title {
+    font-family: 'normal-haas', Arial, sans-serif;
+    font-size: var(--news-title-font-size);
+    color: var(--main-color);
+    text-align: right;
+    padding-right: 0;
+    margin-bottom: 0.5rem;
+}
+
+.news-item {
+    margin-bottom: 4px;
+    text-align: right;
+    padding-right: 0;
+}
+
+.news-year {
+    font-family: 'bold-haas', Arial, sans-serif;
+    font-size: var(--news-year-font-size);
+    color: var(--main-color);
+    display: block;
+}
+
+.news-content {
+    font-family: 'normal-helv', Arial, sans-serif;
+    font-size: var(--news-content-font-size);
+    color: var(--main-color);
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+/* Navigation Items - Using Style 2 */
+.nav-item {
+    padding-left: 15px;
+    padding-bottom: 0px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-family: 'point-helv';
+    display: block;
+    width: 100%;
+    /* Apply Style 2: 40px, 52px, 5px */
+    font-size: var(--text-style-nav-size);
+    line-height: var(--text-style-nav-height);
+    letter-spacing: 0px;
+}
+
+/* Last navigation item (4th from bottom) has no bottom margin */
+.nav-item:last-child {
+    margin-bottom: 5px;
+}
+
+/* Horizontal line underneath each nav item */
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width:  var(--nav-horizontal-line-length); /* Fixed width for inactive items */
+    height: 2px;
+    background-color: var(--line-color);
+    display: block;
+    transition: width 0.3s ease; /* Animation for width changes */
+}
+
+/* Active nav item has full width horizontal line */
+.nav-item.active::after {
+    width: 100%; /* Full width of nav-column */
+}
+
+/* Nav Item Text */
+.nav-item span {
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 1;
+    color: var(--sub-color);
+}
+
+/* Active Navigation Item */
+.nav-item.active span {
+    color: var(--main-color);
+}
+
+/* Nav Item Hover Effect */
+.nav-item:hover {
+    filter: brightness(1.1);
+}
+
+/* Right Content Column (White) - Account for fixed nav */
+.content-column {
+    flex: 1;
+    background-color: var(--white-color);
+    position: relative;
+    padding-left: var(--main-contents-padding); /*main content padding*/
+    margin-left: var(--nav-length); /* Space for fixed navigation */
+    overflow: hidden;
+}
+
+/* Content Area */
+.content-area {
+    padding: 10vh 2rem 2rem 0; /* Top padding 10% of viewport height, no left padding */
+    position: relative;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+/* Slide Animations - Changed direction */
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-out {
+    animation-name: slideOutLeft;
+}
+
+.slide-in {
+    animation-name: slideInLeft;
+}
+
+/* Content Styling - Using Style 4 for headers */
+.content-area h2 {
+    color: #ff0000;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+/* Content Styling - Using Style 4 for paragraphs */
+.content-area p {
+    margin-bottom: 20px;
+    color: var(--main-color);
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+/* Alignment Target Styling - Using Style 3 for non-Main sections */
+.align-target {
+    margin-bottom: 2rem;
+    position: relative;
+    width: fit-content;
+    font-family: 'target-haas';
+    /* Apply Style 3: 24px, 32px, 3px - for align-targets (except Main) */
+    font-size: var(--text-style-target-size);
+    line-height: var(--text-style-target-height);
+    letter-spacing: var(--text-style-target-spacing);
+}
+
+/* Main page align-target uses Style 4 */
+.align-target.align-target-main {
+    font-family: 'target-haas';
+    /* Apply Style 4: 20px, 26px, 1px - for Main page align-target */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+/* Vertical Divider Line - Inside nav column */
+.vertical-divider {
+    position: absolute;
+    width: 2px;
+    background-color: var(--line-color);
+    right: 0; /* Right edge of nav column */
+    top: 0;
+    height: 100%;
+    z-index: 15;
+    /* No default transition - controlled by JavaScript */
+}
+
+/* Horizontal Line under align-target */
+.horizontal-line {
+    position: absolute;
+    height: 2px;
+    background-color: var(--line-color);
+    left: calc(-1 * var(--main-contents-padding)); /* Start from vertical divider */
+    bottom: -0.5rem; /* Just below align-target */
+    transition: width 0.3s ease;
+}
+
+/* Placeholder Container */
+.placeholder-container {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 6.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Info Section 1 - Links - Using Style 1 */
+.info-section-1 {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: calc(1.5*var(--text-style-sub-size));
+    align-items: baseline;
+    line-height: 1;
+}
+
+.info-link {
+    color: var(--main-color);
+    text-decoration: none;
+    line-height: 1;
+    /* Apply Style 1: 16px, 22px, 1px - For CV/LinkedIn/Mail links */
+    font-size: var(--text-style-sub-size);
+    line-height: var(--text-style-sub-height);
+    letter-spacing: var(--text-style-sub-spacing);
+}
+
+/* Info Section 2 - Name - Using Style 2 */
+.info-section-2 {
+    padding: 0;
+    margin: 4px 0 0 0;
+    font-family: 'title-haas';
+    font-weight: bold;
+    border-top: 2px solid var(--line-color);
+    border-bottom: 2px solid var(--line-color);
+    width: fit-content;
+    line-height: 1;
+    padding: 2px 0px 2px 0px;
+    /* Apply Style 2: 40px, 52px, 5px - For nav-items and info-section-2 */
+    font-size: var(--text-style-nav-size);
+    line-height: var(--text-style-nav-height);
+    letter-spacing: var(--text-style-nav-spacing);
+}
+
+/* Info Section 3 - Degree - Using Style 3 */
+.info-section-3 {
+    background-color: transparent;
+    padding: 0;
+    margin: 8px 0 0 0;
+    line-height: 1;
+    font-family: 'normal-haas';
+    /* Apply Style 3: 24px, 32px, 3px - For info-section-3 */
+    font-size: var(--text-style-target-size);
+    line-height: var(--text-style-target-height);
+    letter-spacing: var(--text-style-target-spacing);
+}
+
+/* Info Section 4 - School Info - Using Style 4 */
+.info-section-4 {
+    background-color: transparent;
+    padding: 0;
+    margin: 4px 0 0 0;
+    line-height: 1.2;
+    font-family: 'normal-haas';
+    /* Apply Style 4: 20px, 26px, 1px - For all other text */
+    font-size: var(--text-style-sub-size);
+}
+
+/* Info Section 5 - Location and Time - Using Style 4 */
+.info-section-5 {
+    background-color: transparent;
+    padding: 0;
+    margin: 16px 0 0 0;
+    line-height: 1;
+    font-family: 'normal-haas';
+    /* Apply Style 4: 20px, 26px, 1px - For all other text */
+    font-size: 18px;
+}
+
+/* Project Cards Styling */
+.projects-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.project-card {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    position: relative;
+}
+
+/* Project Image Container */
+.project-image {
+    width: 100px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px 0 0 20px;
+}
+
+.project-image img {
+    width: 150%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left;
+    position: relative;
+    z-index: 1;
+}
+
+/* Left vignette effect */
+.project-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse 200% 150% at right center, transparent 0%, var(--accent-color) 500%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Fade-out mask effect */
+.project-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(to left, var(--white-color) 0%, transparent 80%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Project Content */
+.project-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Project Tags - Using Style 4 */
+.project-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    
+    /* seperator space*/
+    margin-top: 0px;
+    margin-bottom: 4px;
+}
+
+.tag {
+    font-family: 'normal-haas';
+    color: var(--white-color);
+    padding: 1px 0.6rem;
+    border: 1px solid var(--main-color);
+    border-radius: 1rem;
+    background-color: var(--accent-color); /* 기본 색상 */
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+/* 태그별 고유 색상 */
+.tag.augmentation {
+    background-color: #F56341; /* 빨강 계열 */
+}
+
+.tag.intention {
+    background-color: var(--accent-color); /* 파랑 계열 */
+}
+
+.tag.context {
+    background-color: #5F7052; /* 초록 계열 */
+}
+
+.tag.affective {
+    background-color: #67489F; /* 보라 계열 */
+}
+
+/* Separator Lines */
+.separator {
+    border: none;
+    border-top: 1px solid var(--main-color);
+    margin: 0;
+    width: 100%;
+}
+
+/* Project Header (Title and Year) */
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    
+    /* seperator space*/
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.project-title {
+    font-family: 'normal-haas';
+    color: var(--main-color);
+    margin: 0;
+    flex: 1;
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: var(--text-style-target-size);
+    line-height: var(--text-style-target-height);
+    letter-spacing: var(--text-style-target-spacing);
+}
+
+.project-year {
+    font-family: 'normal-haas';
+    color: var(--main-color);
+    flex-shrink: 0;
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: var(--text-style-body-size);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+/* Project Detail Section */
+.project-detail {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    
+    /* seperator space*/
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.detail-label {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    flex-shrink: 0;
+    min-width: 3rem;
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+.detail-text {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    flex: 1;
+    
+    font-size: var(--text-style-sub-size);
+    line-height: var(--text-style-sub-height);
+    letter-spacing: var(--text-style-sub-spacing);
+    
+    border: none;
+}
+
+/* Project Explanation */
+.project-explanation {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: var(--text-style-sub-size);
+    line-height: var(--text-style-sub-height);
+    letter-spacing: var(--text-style-sub-spacing);
+
+    /* seperator space*/
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+/* --- Publication Cards Styling (새로 추가된 코드) --- */
+.publications-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 20px;
+}
+
+.publication-card {
+    display: flex;
+    flex-direction: column; /* 이미지가 없으므로 수직 정렬 */
+    width: 100%;
+    position: relative;
+}
+
+.publication-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 5rem;
+}
+
+.publication-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 4px;
+}
+
+.publication-title {
+    font-family: 'normal-haas';
+    color: var(--main-color);
+    margin: 0;
+    flex: 1;
+
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+.publication-year {
+    font-family: 'normal-haas';
+    color: var(--main-color);
+    flex-shrink: 0;
+    /* Apply Style 4: 20px, 26px, 1px */
+    font-size: var(--text-style-body-size);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+.publication-sub {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+    margin-bottom: 4px;
+}
+
+.publication-link {
+    font-family: 'normal-helv';
+    text-decoration-color: var(--accent-color);
+}
+
+.publication-organization {
+    font-family: 'bold-haas';
+    font-size: var(--text-style-sub-size);
+    line-height: var(--text-style-sub-height);
+    letter-spacing: var(--text-style-sub-spacing);
+    text-align: right;
+}
+
+/* Highlighted Text Styling */
+.highlight {
+    position: relative;
+    color: inherit;
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--main-color);
+    transition: width 0.3s ease;
+}
+
+.highlight:hover::after {
+    width: 100%;
+}
+
+.highlight:hover {
+    color: var(--main-color);
+}
+
+/* Vision Subgoals Section Styling */
+.vision-subgoals {
+    margin-top: 2rem;
+}
+
+.subgoal-section {
+    margin-bottom: 5rem;
+}
+
+/* Subgoal Title - Large subgoal text */
+.subgoal-title {
+    font-family: 'target-haas';
+    color: var(--main-color);
+    margin-bottom: 0.5rem;
+    /* Using Style 3: 24px, 32px, 3px - For subgoal titles */
+    font-size: var(--text-style-target-size);
+    line-height: var(--text-style-target-height);
+    letter-spacing: var(--text-style-target-spacing);
+    font-weight: bold;
+}
+
+/* 2px horizontal dividers */
+.subgoal-divider-2px {
+    width: 100%;
+    height: 2px;
+    background-color: var(--line-color);
+    margin: 2px 0;
+    border: none;
+}
+
+/* 1px horizontal dividers */
+.subgoal-divider-1px {
+    width: 100%;
+    height: 1px;
+    background-color: var(--line-color);
+    margin: 2px 0;
+    border: none;
+}
+
+/* Subgoal Quote - Representative quote */
+.subgoal-quote {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    font-style: italic;
+    /* Using Style 4: 20px, 26px, 1px - For quote text */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+/* Quote Reference - Right aligned */
+.subgoal-ref {
+    font-family: 'normal-helv';
+    color: var(--sub-color);
+    text-align: right;
+    margin-bottom: 1rem;
+    /* Using Style 1: 16px, 20px, 0px - For reference text */
+    font-size: var(--text-style-sub-size);
+    line-height: var(--text-style-sub-height);
+    letter-spacing: var(--text-style-sub-spacing);
+}
+
+/* Individual Example Item */
+.subgoal-example {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    /* Using Style 4: 20px, 26px, 1px - For example text */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+/* Detail Toggle Button */
+.subgoal-detail-toggle {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    /* Using Style 4: 20px, 26px, 1px - For toggle text */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+.subgoal-detail-toggle:hover {
+    color: var(--accent-color);
+}
+
+/* Detail Content - Hidden by default */
+.subgoal-detail {
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.3s ease, padding 0.3s ease;
+    max-height: 0;
+    opacity: 0;
+}
+
+.subgoal-detail-content {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    white-space: pre-line;
+    /* Using Style 4: 20px, 26px, 1px - For detail content */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
