@@ -17,21 +17,21 @@ const visionSubgoals = sectionsData.vision.subgoals;
 function generateVisionSubgoals() {
     return visionSubgoals.map((subgoal, index) => `
         <div class="subgoal-section">
-            <div class="subgoal-title">${subgoal.subgoal}</div>
+            <div class="subgoal-title">${subgoal.subgoal_title}</div>
             <div class="subgoal-divider-2px"></div>
+            <div class="subgoal-text">${parseAllText(subgoal.subgoal)}</div>
             <div class="subgoal-examples">
-                ${subgoal.examples.map(example => `<div class="subgoal-example">• ${parseHighlightText(example)}</div>`).join('')}
+                ${subgoal.examples.map(example => `<div class="subgoal-example">• ${parseAllText(example)}</div>`).join('')}
             </div>
             <div class="subgoal-divider-1px"></div>
             <div class="subgoal-detail-toggle" onclick="toggleSubgoalDetail(${index})">Detail ></div>
             <div class="subgoal-detail" id="subgoal-detail-${index}" style="display: none;">
-                <div class="subgoal-detail-content">${parseHighlightText(subgoal.detail)}</div>
+                <div class="subgoal-detail-content">${parseAllText(subgoal.detail)}</div>
             </div>
             <div class="subgoal-divider-2px"></div>
         </div>
     `).join('');
 }
-
 
 // Function to toggle subgoal detail visibility with smooth animation
 function toggleSubgoalDetail(index) {
@@ -60,9 +60,7 @@ function toggleSubgoalDetail(index) {
         
         // Animate in
         detailElement.style.opacity = '1';
-        detailElement.style.maxHeight = '500px'; // 충분한 높이
-        detailElement.style.paddingTop = '1rem';
-        detailElement.style.paddingBottom = '1rem';
+        detailElement.style.maxHeight = '1500px'; // 충분한 높이
     }
 }
 
@@ -80,7 +78,7 @@ const sectionData = [
                 <div class="info-section-2">${siteInfo.name}</div>
                 <div class="info-section-3">${siteInfo.degree}</div>
                 <div class="departments">
-                    ${siteInfo.departments.map(department => `<div class="info-section-4">| ${department}</div>`).join('')}
+                    ${siteInfo.departments.map(department => `<div class="info-section-4"> ${department}</div>`).join('')}
                 </div>
                 <div class="info-section-5">I live at <span id="current-time"></span> in ${siteInfo.location}.</div>
             </div>
@@ -107,6 +105,11 @@ const sectionData = [
         <p>${sectionsData.vision.intro}</p>
         <div class="align-target">${sectionsData.vision.target}</div>
         <p>More detailed research questions are described below.</p>
+        
+        <div class = "callout-content">
+            <span class="callout-title"> ${sectionsData.vision.callout.title} </span>
+            ${parseAllText(sectionsData.vision.callout.content)}
+        </div>
         
         <div class="vision-subgoals">
             ${generateVisionSubgoals()}
@@ -151,6 +154,27 @@ const verticalDivider = document.getElementById('verticalDivider');
 function parseHighlightText(text) {
     return text.replace(/\*([^*]+)\*/g, '<span class="highlight">$1</span>');
 }
+
+/**
+ * Parse text and wrap words marked with underscores in sub-text spans
+ * @param {string} text - Text with potential _marked_ words
+ * @returns {string} - HTML string with sub-text spans
+ */
+function parseSubText(text) {
+    return text.replace(/_([^_]+)_/g, '<span class="sub-text">$1</span>');
+}
+
+/**
+ * Parse text for both highlights and sub-text
+ * @param {string} text - Text with potential *highlights* and _sub-text_
+ * @returns {string} - HTML string with both spans
+ */
+function parseAllText(text) {
+    let result = parseHighlightText(text);
+    result = parseSubText(result);
+    return result;
+}
+
 
 /**
  * Generate HTML for a single project card
@@ -403,6 +427,14 @@ function switchSection(newSectionId) {
                 
                 // Animate navsubContainer in if switching to Main section (section 1)
                 if (newSectionId === 1 && navsubContainer) {
+                    navsubContainer.classList.remove('navsubContainer-slide-out');
+                    navsubContainer.classList.add('navsubContainer-slide-in');
+                } else if (newSectionId !== 1 && navsubContainer) {
+                    // Hide navsubContainer for non-main sections
+                    navsubContainer.style.display = 'none';
+                }
+                if (newSectionId === 1 && navsubContainer) {
+                    navsubContainer.style.display = 'flex';
                     navsubContainer.classList.remove('navsubContainer-slide-out');
                     navsubContainer.classList.add('navsubContainer-slide-in');
                 }

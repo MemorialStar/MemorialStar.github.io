@@ -5,43 +5,73 @@ main:
     I am an undergraduate student at KAIST with a passion for exploring
     how technology can enhance human wisdom and well-being.
     My research vision aligns with:
-
 vision:
   intro: |
-    I want the world to be a wiser place. I dream that people *become wiser*, and that artificial intelligence can help achieve this. More specifically, while wisdom can be defined and valued in many ways, I dream of an intelligence—for both humans and AI—that can see a broader, farther, and fundamentally better path, based on an understanding of the rich, unstated states: situations, contexts, intentions, and emotions. Under this goal, my question as a researcher is as follows:
-  target: "How do humans and AI infer the 'Latent State'—hidden intentions, subtle emotions, and shifting contexts—that is not apparent in the data, and understand the dynamics of how that state changes? And based on that understanding, how do they design and create better paths to reach a specific state?"
+    I want the world to be a wiser place. I dream that people become wiser, and that artificial intelligence can help achieve this. More specifically, while wisdom can be defined and valued in many ways, I dream of an intelligence—for both humans and AI—that can see a broader, farther, and fundamentally better path, based on an understanding of the rich, unstated states: situations, contexts, intentions, and emotions. Under this goal, my question as a researcher is as follows:
+  target: "How do humans and AI infer the 'Latent State'_hidden intentions, subtle emotions, and shifting contexts_that is not apparent in the data, and understand the dynamics of how that state changes? And based on that understanding, how do they design and create better paths to reach a specific state?"
   target_class: "align-target"
+  callout:
+    title: "Latent State & Dynamics?"
+    content: |
+      It is necessary to clarify the terms 'Latent State(Space)' and 'Latent Dynamics' as used in this text.
+      
+      In AI fields, the 'Latent Space' in models like VAEs and GANs is primarily used to refer to the result of representing or embedding observable data into a lower-dimensional space.
+      
+      However, my interest here is *not in a 'summary' of data or its meaningful abstract features, but in the unseen 'cause' that generated the data*.
+      From this viewpoint, the concept might be seen as closer to the 'state space' in a POMDP (Partially Observable Markov Decision Process) framework.
+      You would not be mistaken to read 'state space' in place of the term 'latent space' that follows. 
+        
+        However, I have chosen the more encompassing term 'latent space' to emphasize three points compared to the typical use of 'state space':
+      1) I want to discuss information that is richer and more latent;
+      2) I want to address subjective or complex states like human intention, emotion, and procedural context; and
+      3) I want to focus on the dynamics within the space where these states exist, rather than the static states themselves.
+      
+      If you know a better term and would suggest it to <a href="mailto:myemail@gmail.com">me</a>, I would be truly, truly grateful.
   subgoals:
-    - subgoal: "How can humans and AI learn to infer the changes in an unseen 'latent state' from the flow of observable data, and learn the principles of its change, the 'latent dynamics'?"
+    - subgoal_title: "subgoal_title"
+      subgoal: "How can humans and AI learn to infer the changes in an unseen 'latent state' from the flow of observable data, and learn the principles of its change, the 'latent dynamics'?"
       detail: |
-        Observable phenomena are the results of underlying latent causes. Language is the result of thought, and a painting's value is amplified when the intended meaning within it is profound and well-aligned with the work itself. Such latent states are dynamic, and by creating various data, we expect to change the state (thoughts, philosophies, values) of those who receive it. My writing and rewriting of this very text stems from my hope that you, the reader, will understand my vision and discuss it with me. And if I (hopefully) achieve that goal, it means I have a good understanding of which expressions, structures, and examples I must use to help you easily reach the state I desire. How is this learned? Before that, what characteristics does this dynamical system exhibit? How can we describe the latent space that will be given in a real application? Does an 'attractor' exist in the latent space (e.g., Will you resonate with my vision just the same, even if I write from a different state of mind?)? Is the transition between states predictable (e.g., Can I predict your reaction before I show you this text?), or does it exhibit the characteristics of chaos (e.g., Is showing it to you the only way to find out?)? Can we distinguish completely different latent states from flows of data that appear almost identical on the surface?
+        Observable phenomena are the results of underlying latent causes. Language is the result of thought, and a painting's value is amplified when the intended meaning within it is profound and well-aligned with the work itself. Such latent states are dynamic, and by creating various data, we expect to change the state (thoughts, philosophies, values) of those who receive it. My writing and rewriting of this very text stems from my hope that you, the reader, will understand my vision and discuss it with me. And if I (hopefully) achieve that goal, it means I have a good understanding of which expressions, structures, and examples I must use to help you easily reach the state I desire. 
+        
+        How is this learned? Before that, what characteristics does this dynamical system exhibit? How can we describe the latent space that will be given in a real application? Does an 'attractor' exist in the latent space (e.g., Will you resonate with my vision just the same, even if I write from a different state of mind?)? Is the transition between states predictable (e.g., Can I predict your reaction before I show you this text?), or does it exhibit the characteristics of chaos (e.g., Is showing it to you the only way to find out?)? Can we distinguish completely different latent states from flows of data that appear almost identical on the surface?
       examples:
         - "A skilled yoga instructor reads a student's intention—'where they are trying to apply force'—from the subtle differences in their movements, guiding them not only to the correct posture but also to the right mindset and attention. How is this possible? Could an AI do this?"
-        - "What does it mean to be good at 'reading the room'? What is the ability to 'perceptively' grasp subtle emotional shifts or contexts that are hard for us to articulate, and how is it possible?"
+        - "What does it mean to be good at *'reading the room'*? What is the ability to 'perceptively' grasp subtle emotional shifts or contexts that are hard for us to articulate, and how is it possible?"
         - "Is 'context engineering' that includes latent information possible?"
         - "Can an AI map an 'affective' latent space? Can we be moved by a work of art created by an AI?"
         - "Can various sensory inputs (a tremor in the voice, body movements, temperature changes) and biosignals (heart rate, brainwaves, stress levels) be used to enable an AI to empathize emotionally?"
 
-    - subgoal: "Based on an understanding of latent dynamics, how can we formulate a 'strategic plan' for long-term goals and guide interactions to move towards a target state within the latent space?"
+    - subgoal_title: "subgoal_title"
+      subgoal: "Based on an understanding of latent dynamics, how can we formulate a 'strategic plan' for long-term goals and guide interactions to move towards a target state within the latent space?"
       detail: |
-        Understanding must lead to active behavior toward a goal. A wise AI should be a 'coordinator' that empathizes with the user's intent and deliberates alongside them, rather than being a mere command-follower. It must be able to draw a 'map' of the vast state space that is the latent space, and autonomously explore and experiment with optimal paths (strategies) to reach a target destination on that map. Perhaps the reason philosophy on wisdom today speaks of experience as a crucial condition is that learning from surface-level data alone is insufficient to explore and understand this vast latent space. How can we, with an understanding of the latent space, find and plan the best sub-goals (paths within the latent space) to achieve a long-term objective?
+        Understanding must lead to active behavior toward a goal. A wise AI should be a 'coordinator' that empathizes with the user's intent and deliberates alongside them, rather than being a mere command-follower. It must be able to draw a 'map' of the vast state space that is the latent space, and autonomously explore and experiment with optimal paths (strategies) to reach a target destination on that map. 
+        
+        Perhaps the reason philosophy on wisdom today speaks of experience as a crucial condition is that learning from surface-level data alone is insufficient to explore and understand this vast latent space. How can we, with an understanding of the latent space, find and plan the best sub-goals (paths within the latent space) to achieve a long-term objective?
       examples:
         - "Could we co-author a 1,000-page novel with an AI? Could it develop the storyline from the very beginning to deliver a final twist and emotional impact?"
         - "Can a smoking cessation AI analyze a user's behavior patterns, distinguish between a situation where they are habitually about to smoke after a meal and one where they are mentally exhausted from a long day at work, and then set a tailored strategy to guide the user gently?"
         - "Can an AI persuade a person? Before that, in matters where there is no right or wrong, how do people persuade one another? Why are some better than others at this process of actively conversing with the other party to grasp their demands and logical structure, identifying the ultimate higher goal of the conversation itself, and then selecting the most effective evidence and sequence to lead the dialogue toward that goal?"
         - "Can an AI perform a piece of music with its own interpretation? As in this video, can it understand the emotional intent and context hidden behind the melody and perform by modulating the sound to express it better?"
 
-    - subgoal: "How do we have resilience in latent space and maintain a set intention?"
+    - subgoal_title: "subgoal_title"
+      subgoal: "How do we have resilience in latent space and maintain a set intention?"
       detail: |
-        Maintaining intention and attention is incredibly difficult. Our minds are always wandering. Meditation, or more specifically Samatha, is the practice of developing the power to overcome this wandering nature of our minds and continuously maintain attention on a chosen object. The key is that a person in a very deep state of meditation, Jhāna, achieved through this practice, does not block out external stimuli irrelevant to their set intention. On the contrary, they are more keenly aware of all those stimuli, yet they do not react. How is this possible? Before that, what does this mean? How can these two states be described differently within the latent space? Can we define a concept like dynamical stability—the ability to quickly return to the originally planned path even if the state is momentarily perturbed by external stimuli—to quantitatively represent the 'resilience' of a person or an AI? Can we train an AI to develop the power of sustained attention? For instance, could we develop a form of meditation specifically for AI?
+        Maintaining intention and attention is incredibly difficult. Our minds are always wandering. Meditation, or more specifically Samatha, is the practice of developing the power to overcome this wandering nature of our minds and continuously maintain attention on a chosen object. 
+        
+        The key is that a person in a very deep state of meditation, Jhāna, achieved through this practice, does not block out external stimuli irrelevant to their set intention. On the contrary, they are more keenly aware of all those stimuli, yet they do not react. How is this possible? Before that, what does this mean? How can these two states be described differently within the latent space? 
+        
+        Can we define a concept like dynamical stability—the ability to quickly return to the originally planned path even if the state is momentarily perturbed by external stimuli—to quantitatively represent the 'resilience' of a person or an AI? Can we train an AI to develop the power of sustained attention? For instance, could we develop a form of meditation specifically for AI?
       examples:
         - "A meditator is more adept than us at maintaining a state of concentration (intention) without being swayed by internal and external distractions. Can the magnitude of this 'mental strength' be computationally modeled within the latent space?"
         - "In what situations are we easily distracted? How can we quickly break free and maintain our attention? Can an AI help in this process? Not in a superficial way like detecting eye movements and giving an alarm, but by providing fundamental help to reach a state where 'an alarm itself is not needed,' based on a rich understanding of our environment and internal state?"
         - "How can an AI's 'robustness' be defined, quantified, and cultivated? Can we develop 'meditation for AI'?"
 
-    - subgoal: "How can strategic interaction within the latent space lead to the 'emergence' of new concepts or expressions that did not exist before, and what are the fundamental constraints and structures of the dynamical system that enable this emergence?"
+    - subgoal_title: "subgoal_title"
+      subgoal: "How can strategic interaction within the latent space lead to the 'emergence' of new concepts or expressions that did not exist before, and what are the fundamental constraints and structures of the dynamical system that enable this emergence?"
       detail: |
-        I believe that if we understand the dynamics of the latent space, we can understand the process of its 'surfacing.' And in that process, I believe we can understand and induce the creative act of generating new expressions themselves—such as coining neologisms that better capture subtle meanings or developing new artistic techniques—that go beyond the combination of existing elements. This is an exploration into the possibility of AI becoming a partner that creates new culture, philosophy, and meaning alongside humans. How can the process of a new word (a neologism) being born to express a subtle feeling on the boundary of two latent states be described as a dynamical event in the latent space? Do universal constraints or a 'grammar' exist in this process? Under what conditions do we create? Can we obtain a mathematical language to describe creation?
+        I believe that if we understand the dynamics of the latent space, we can understand the process of its 'surfacing.' And in that process, I believe we can understand and induce the creative act of generating new expressions themselves—such as coining neologisms that better capture subtle meanings or developing new artistic techniques—that go beyond the combination of existing elements. 
+        
+        This is an exploration into the possibility of AI becoming a partner that creates new culture, philosophy, and meaning alongside humans. How can the process of a new word (a neologism) being born to express a subtle feeling on the boundary of two latent states be described as a dynamical event in the latent space? Do universal constraints or a 'grammar' exist in this process? Under what conditions do we create? Can we obtain a mathematical language to describe creation?
       examples:
         - "Just as AlphaZero 'discovered' creative moves in Go that were beyond human imagination under the game's rules, can an AI, through self-directed exploration, discover new narrative structures or artistic forms that transcend human intuition?"
         - "Just as we group together various physical reactions commonly seen in tense situations, define it as 'stress,' and study the relationship between this and other concepts, can an AI also create and describe new concepts? And just as we draw diagrams or graphs, can an AI also express them in a multimodal way?"

@@ -183,11 +183,17 @@ body::before{
     --text-style-body-height: 27px;
     --text-style-body-spacing: -0.05px;
 
-    /* Style 5: 20px, 32px, 1px - examples */
-    --text-style-example-size: 18px;
-    --text-style-example-height: 27px;
-    --text-style-example-spacing: -0.05px;
-    
+    /* Style 5: 16px, 20px, 1px - examples */
+    --text-style-example-size: 16px;
+    --text-style-example-height: 20px;
+    --text-style-example-spacing: 0.2px;
+
+    /* Sub-text styling */
+    --text-style-sub-text-size: 12px; /* body text의 절반 */
+     
+    /* Highlight font family */
+    --highlight-font: 'target-haas';
+
     /* nav length */
     --gap-width: 40px;
     --main-margin: min(140px, calc((100vw / 10)));
@@ -535,8 +541,8 @@ body::before{
     width: fit-content;
     font-family: 'target-haas';
     /* Apply Style 3: 24px, 32px, 3px - for align-targets (except Main) */
-    font-size: var(--text-style-target-size);
-    line-height: var(--text-style-target-height);
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
     letter-spacing: var(--text-style-target-spacing);
 }
 
@@ -603,7 +609,7 @@ body::before{
 /* Info Section 2 - Name - Using Style 2 */
 .info-section-2 {
     padding: 0;
-    margin: 16px 0 0 0;
+    margin: 6px 0 0 0;
     font-family: 'title-haas';
     font-weight: bold;
     border-top: 2px solid var(--line-color);
@@ -927,21 +933,19 @@ body::before{
 /* Highlighted Text Styling */
 .highlight {
     position: relative;
-    font-family: var(--highlight-font); /* point-helv 폰트 적용 */
-    color: inherit;
+    font-family: var(--highlight-font);
+    color: var(--accent-color);
     transition: all 0.2s ease;
     cursor: default;
 }
 
-/* 기존 밑줄 애니메이션 제거 */
 .highlight::after {
-    display: none; /* 밑줄 효과 비활성화 */
+    display: none;
 }
 
 .highlight:hover {
-    color: var(--accent-color); /* 호버 시 accent color로 변경 */
+    color: var(--accent-color);
 }
-
 
 /* Vision Subgoals Section Styling */
 .vision-subgoals {
@@ -949,29 +953,19 @@ body::before{
 }
 
 .subgoal-examples {
-    margin-bottom: 1rem; /* 예시 섹션 하단 여백 */
-}
-
-.subgoal-example {
-    font-family: 'normal-helv';
-    color: var(--main-color);
-    margin-bottom: 1rem; /* 예시 간 간격을 2배로 (기존 0.5rem의 2배) */
-    /* Using new example style: 15px, 20px */
-    font-size: var(--text-style-example-size);
-    line-height: var(--text-style-example-height);
-    letter-spacing: var(--text-style-example-spacing);
+    margin-bottom: 0.4rem; /* 예시 섹션 하단 여백 */
 }
 
 
+/* 기존 .subgoal-section 수정 (Line 953-955) */
 .subgoal-section {
-    margin-bottom: 5rem;
+    margin-bottom: 6rem; /* 기존 5rem에서 1rem 증가 */
 }
 
-/* Subgoal Title - Large subgoal text */
+/* 새로운 subgoal-title-new 스타일 추가 */
 .subgoal-title {
     font-family: 'target-haas';
     color: var(--main-color);
-    margin-bottom: 0.5rem;
     /* Using Style 3: 24px, 32px, 3px - For subgoal titles */
     font-size: var(--text-style-target-size);
     line-height: var(--text-style-target-height);
@@ -979,23 +973,47 @@ body::before{
     font-weight: bold;
 }
 
+/* 새로운 subgoal-text 스타일 (기존 subgoal 텍스트용) */
+.subgoal-text {
+    font-family: 'target-haas';
+    color: var(--main-color);
+    margin-bottom: 2rem; /* subgoal과 examples 간 간격 */
+    /* Body text size 사용 */
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+    font-weight: bold;
+}
+
+/* 기존 .subgoal-divider-1px 수정 - margin을 두 배로 */
+.subgoal-divider-1px {
+    width: 100%;
+    height: 1px;
+    background-color: var(--line-color);
+    margin: 3rem 0 4px 0; /* 기존 2px 0에서 두 배로 */
+    border: none;
+}
+
 /* 2px horizontal dividers */
 .subgoal-divider-2px {
     width: 100%;
     height: 2px;
     background-color: var(--line-color);
-    margin: 2px 0;
+    margin: 4px 0;
     border: none;
 }
 
-/* 1px horizontal dividers */
-.subgoal-divider-1px {
-    width: 100%;
-    height: 1px;
-    background-color: var(--line-color);
-    margin: 2px 0;
-    border: none;
+/* 기존 .subgoal-example은 그대로 유지하되 margin만 조정 */
+.subgoal-example {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    margin-bottom: 1rem; /* 예시 간 간격 유지 */
+    /* Using example style: 15px, 20px */
+    font-size: var(--text-style-example-size);
+    line-height: var(--text-style-example-height);
+    letter-spacing: var(--text-style-example-spacing);
 }
+
 
 /* Subgoal Quote - Representative quote */
 .subgoal-quote {
@@ -1020,16 +1038,6 @@ body::before{
     letter-spacing: var(--text-style-sub-spacing);
 }
 
-/* Individual Example Item */
-.subgoal-example {
-    font-family: 'normal-helv';
-    color: var(--main-color);
-    margin-bottom: calc(1rem); /* 기존 간격의 2배 */
-    /* Using new example style: 15px, 20px */
-    font-size: var(--text-style-example-size);
-    line-height: var(--text-style-example-height);
-    letter-spacing: var(--text-style-example-spacing);
-}
 
 /* Detail Toggle Button */
 .subgoal-detail-toggle {
@@ -1065,3 +1073,44 @@ body::before{
     line-height: var(--text-style-body-height);
     letter-spacing: var(--text-style-body-spacing);
 }
+
+/* Sub Text Styling */
+.sub-text {
+    font-size: var(--text-style-sub-text-size);
+    line-height: inherit;
+    letter-spacing: inherit;
+    color: var(--sub-color);
+    font-family: inherit;
+}
+
+.callout-content {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    /* Using body text style */
+    font-size: var(--text-style-example-size);
+    line-height: var(--text-style-example-height);
+    letter-spacing: var(--text-style-example-spacing);
+    margin-bottom: 6rem;
+    text-align: justify;
+}
+
+
+.callout-title {
+    font-family: 'target-haas';
+    color: var(--main-color);
+    font-size: var(--text-style-example-size);
+    line-height: var(--text-style-example-height);
+    letter-spacing: var(--text-style-example-spacing);
+    margin-right: 2rem;
+  
+}
+
+.callout-content a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.callout-content a:hover {
+    text-decoration: underline;
+}
+
