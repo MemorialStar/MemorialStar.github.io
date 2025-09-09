@@ -360,7 +360,10 @@ function attachEventListeners() {
     window.addEventListener('scroll', throttle(() => updateVerticalDivider(false), 16));
     
     // Resize event listener to recalculate divider (no animation)
-    window.addEventListener('resize', debounce(() => updateVerticalDivider(false), 250));
+    window.addEventListener('resize', debounce(() => {
+        updateVerticalDivider(false);
+        updateHorizontalLine();
+    }, 250));
 }
 
 /**
@@ -448,6 +451,8 @@ function switchSection(newSectionId) {
                     
                     // Final divider update after animation (no animation)
                     updateVerticalDivider(false);
+                    // Also update horizontal line for new content
+                    updateHorizontalLine();
                 }, 500);
             }, 100); // Reduced delay
         }, 50);
@@ -462,29 +467,15 @@ function loadSectionContent(sectionId, animate = false) {
     if (section) {
         contentArea.innerHTML = section.content;
         
-        // Use a slight delay to ensure the DOM has rendered
+        // Use multiple delays to ensure proper DOM rendering and measurement
         setTimeout(() => {
-            const alignTarget = document.querySelector('.align-target');
-            const contentColumn = document.querySelector('.content-column');
-
-            if (alignTarget && contentColumn) {
-                // Remove existing lines before adding a new one
-                const existingLines = alignTarget.querySelectorAll('.horizontal-line');
-                existingLines.forEach(line => line.remove());
-
-                // Create and append the new line
-                const horizontalLine = document.createElement('div');
-                horizontalLine.className = 'horizontal-line';
-                alignTarget.appendChild(horizontalLine);
-                
-                const computedStyle = window.getComputedStyle(contentColumn);
-                const paddingLeft = parseInt(computedStyle.getPropertyValue('padding-left'), 10);
-                
-                // This offsetWidth should now be correct
-                const textWidth = alignTarget.offsetWidth;
-                
-                horizontalLine.style.width = `calc(${textWidth + paddingLeft}px + 3rem)`;
-            }
+            updateHorizontalLine();
+        }, 50);
+        
+        // Also update after a longer delay to catch any late rendering
+        setTimeout(() => {
+            updateHorizontalLine();
+        }, 200);
 
             // Other initializations after content is fully rendered
             if (sectionId === 1) {
@@ -500,6 +491,56 @@ function loadSectionContent(sectionId, animate = false) {
             }
         }, 50); // A small delay
     }
+}
+
+/**
+ * Update horizontal line under align-target to match text width
+ */
+function updateHorizontalLine() {
+    const alignTarget = document.querySelector('.align-target');
+    const contentColumn = document.querySelector('.content-column');
+
+    if (!alignTarget || !contentColumn) return;
+    
+    // Remove existing lines before adding a new one
+    const existingLines = alignTarget.querySelectorAll('.horizontal-line');
+    existingLines.forEach(line => line.remove());
+
+    // Force a reflow to ensure accurate measurements
+    alignTarget.offsetHeight;
+    
+    // Create a temporary element to measure the actual text width
+    const tempElement = document.createElement('div');
+    tempElement.style.position = 'absolute';
+    tempElement.style.visibility = 'hidden';
+    tempElement.style.whiteSpace = 'nowrap';
+    tempElement.style.font = window.getComputedStyle(alignTarget).font;
+    tempElement.style.fontSize = window.getComputedStyle(alignTarget).fontSize;
+    tempElement.style.fontFamily = window.getComputedStyle(alignTarget).fontFamily;
+    tempElement.style.fontWeight = window.getComputedStyle(alignTarget).fontWeight;
+    tempElement.style.letterSpacing = window.getComputedStyle(alignTarget).letterSpacing;
+    
+    // For multi-line text, we need to measure the last line
+    const textContent = alignTarget.textContent || alignTarget.innerText;
+    const lines = textContent.split('\n').filter(line => line.trim() !== '');
+    const lastLine = lines[lines.length - 1] || textContent;
+    
+    tempElement.textContent = lastLine.trim();
+    document.body.appendChild(tempElement);
+    
+    const textWidth = tempElement.offsetWidth;
+    document.body.removeChild(tempElement);
+    
+    // Create and append the new line
+    const horizontalLine = document.createElement('div');
+    horizontalLine.className = 'horizontal-line';
+    alignTarget.appendChild(horizontalLine);
+    
+    const computedStyle = window.getComputedStyle(contentColumn);
+    const paddingLeft = parseInt(computedStyle.getPropertyValue('padding-left'), 10);
+    
+    // Set the width to match the actual text width
+    horizontalLine.style.width = `calc(${textWidth + paddingLeft}px + 3rem)`;
 }
 
 /**
