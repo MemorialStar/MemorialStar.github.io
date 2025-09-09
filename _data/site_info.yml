@@ -8,13 +8,13 @@ location: "Daejeon, South Korea"
 
 social_links:
   - name: "CV"
-    url: "https://example.com"
+    url: "https://docs.google.com/document/d/140QDHJ_93UpuZ3GfnLpdPw8Zj2Srp1WU4Rdm4TaPiEs/edit?usp=sharing"
   - name: "LinkedIn"
-    url: "https://example.com"
+    url: "https://www.linkedin.com/in/j0min/"
   - name: "X"
-    url: "https://example.com"
+    url: "https://x.com/young_min_Jung"
   - name: "Email"
-    url: "mailto:your-email@example.com"
+    url: "mailto:james09756@gmail.com"
 
 profile_image: "assets/img/me.jpg"
 favicon: "assets/img/youngmin.svg"

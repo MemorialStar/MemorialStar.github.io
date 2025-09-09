@@ -187,6 +187,7 @@ body::before{
     --text-style-example-size: 16px;
     --text-style-example-height: 20px;
     --text-style-example-spacing: 0.2px;
+    
 
     /* Sub-text styling */
     --text-style-sub-text-size: 12px; /* body text의 절반 */
@@ -541,8 +542,8 @@ body::before{
     width: fit-content;
     font-family: 'target-haas';
     /* Apply Style 3: 24px, 32px, 3px - for align-targets (except Main) */
-    font-size: var(--text-style-body-size);
-    line-height: var(--text-style-body-height);
+    font-size: var(--text-style-target-size);
+    line-height: var(--text-style-target-height);
     letter-spacing: var(--text-style-target-spacing);
     white-space: pre-line;
 }
@@ -551,8 +552,8 @@ body::before{
 .align-target.align-target-main {
     font-family: 'target-haas';
     /* Apply Style 4: 20px, 26px, 1px - for Main page align-target */
-    font-size: var(--text-style-body-size);
-    line-height: var(--text-style-body-height);
+    font-size: 20px;
+    line-height: 26px;
     letter-spacing: var(--text-style-body-spacing);
 }
 

@@ -99,7 +99,7 @@ const sectionData = [
     id: 2,
     content: `
         <p>${parseAllText(sectionsData.vision.intro)}</p>
-        <div class="align-target">${parseAllText(sectionsData.vision.target)}</div>
+        <div class="align-target ${sectionsData.main.target_class}">${parseAllText(sectionsData.vision.target)}</div>
         <p>More detailed research questions are described below.</p>
         
         <div class = "callout-content">
