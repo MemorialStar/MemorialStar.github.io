@@ -22,7 +22,7 @@
 - title: "REWIND"
   year: "2021-2022"
   tags: ["Augmentation", "Affective"]
-  detail: "Stock information service that visualizes past stock charts through sentiment analysis"
+  detail: "Stock information service that *visualizes past stock charts through sentiment analysis*"
   explanation: "Analyzes public sentiment toward each financial event by collecting opinions on social media and then visualizes them chronologically along with the stock chart. This allows users to review stock market movements and record their thoughts. Users can gain their own insights into current stock market events and make wiser decisions."
   image: "/assets/img/projects/rewind.jpg"
 
@@ -30,5 +30,5 @@
   year: "2021"
   tags: ["Augmentation", "Intention", "Context"]
   detail: "A mobile application for sustainable weight management using bio-data"
-  explanation: "Delivers an integrated diet solution that promotes sustainable weight management by reframing dieting as a lifestyle change, helping to reduce the body's starvation response. It semi-automatically collects and analyzes bio-data and guide users to more healthy, sustainable way of diet: including meal regularity, physical activity, stress, and sleep patterns."
+  explanation: "Delivers an integrated diet solution that promotes sustainable weight management by reframing *dieting as a lifestyle change, helping to reduce the body's starvation response*. It *semi-automatically collects and analyzes bio-data and guide users to more healthy, sustainable way of diet*: including meal regularity, physical activity, stress, and sleep patterns."
   image: "/assets/img/projects/betterself.png"
