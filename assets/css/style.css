@@ -178,9 +178,9 @@ body::before{
     --text-style-target-height: 36px;
     --text-style-target-spacing: 0px;
     
-    /* Style 4: 20px, 26px, 1px - For all other text */
+    /* Style 4: 20px, 32px, 1px - For all other text */
     --text-style-body-size: 20px;
-    --text-style-body-height: 26px;
+    --text-style-body-height: 32px;
     --text-style-body-spacing: -0.05px;
 
     /* nav length */
@@ -918,37 +918,45 @@ body::before{
     text-align: right;
 }
 
+
 /* Highlighted Text Styling */
 .highlight {
     position: relative;
+    font-family: var(--highlight-font); /* point-helv 폰트 적용 */
     color: inherit;
     transition: all 0.2s ease;
     cursor: default;
 }
 
+/* 기존 밑줄 애니메이션 제거 */
 .highlight::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background-color: var(--main-color);
-    transition: width 0.3s ease;
-}
-
-.highlight:hover::after {
-    width: 100%;
+    display: none; /* 밑줄 효과 비활성화 */
 }
 
 .highlight:hover {
-    color: var(--main-color);
+    color: var(--accent-color); /* 호버 시 accent color로 변경 */
 }
+
 
 /* Vision Subgoals Section Styling */
 .vision-subgoals {
     margin-top: 2rem;
 }
+
+.subgoal-examples {
+    margin-bottom: 1rem; /* 예시 섹션 하단 여백 */
+}
+
+.subgoal-example {
+    font-family: 'normal-helv';
+    color: var(--main-color);
+    margin-bottom: 1rem; /* 예시 간 간격을 2배로 (기존 0.5rem의 2배) */
+    /* Using new example style: 15px, 20px */
+    font-size: var(--text-style-example-size);
+    line-height: var(--text-style-example-height);
+    letter-spacing: var(--text-style-example-spacing);
+}
+
 
 .subgoal-section {
     margin-bottom: 5rem;
@@ -1011,10 +1019,11 @@ body::before{
 .subgoal-example {
     font-family: 'normal-helv';
     color: var(--main-color);
-    /* Using Style 4: 20px, 26px, 1px - For example text */
-    font-size: var(--text-style-body-size);
-    line-height: var(--text-style-body-height);
-    letter-spacing: var(--text-style-body-spacing);
+    margin-bottom: calc(1rem); /* 기존 간격의 2배 */
+    /* Using new example style: 15px, 20px */
+    font-size: var(--text-style-example-size);
+    line-height: var(--text-style-example-height);
+    letter-spacing: var(--text-style-example-spacing);
 }
 
 /* Detail Toggle Button */

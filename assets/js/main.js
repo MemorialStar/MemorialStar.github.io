@@ -19,20 +19,19 @@ function generateVisionSubgoals() {
         <div class="subgoal-section">
             <div class="subgoal-title">${subgoal.subgoal}</div>
             <div class="subgoal-divider-2px"></div>
-            <div class="subgoal-quote">"${subgoal.quote}"</div>
-            <div class="subgoal-ref">${subgoal.ref}</div>
             <div class="subgoal-examples">
-                ${subgoal.examples.map(example => `<div class="subgoal-example">- ${example}</div>`).join('')}
+                ${subgoal.examples.map(example => `<div class="subgoal-example">• ${parseHighlightText(example)}</div>`).join('')}
             </div>
             <div class="subgoal-divider-1px"></div>
             <div class="subgoal-detail-toggle" onclick="toggleSubgoalDetail(${index})">Detail ></div>
             <div class="subgoal-detail" id="subgoal-detail-${index}" style="display: none;">
-                <div class="subgoal-detail-content">${subgoal.detail}</div>
+                <div class="subgoal-detail-content">${parseHighlightText(subgoal.detail)}</div>
             </div>
             <div class="subgoal-divider-2px"></div>
         </div>
     `).join('');
 }
+
 
 // Function to toggle subgoal detail visibility with smooth animation
 function toggleSubgoalDetail(index) {
@@ -79,7 +78,9 @@ const sectionData = [
                     ).join('')}
                 </div>
                 <div class="info-section-2">${siteInfo.name}</div>
-                <div class="info-section-3">${siteInfo.degree}</div>
+                <div class="degrees">
+                    ${siteInfo.degree.map(degree => `<div class="info-section-3">| ${degree}</div>`).join('')}
+                </div>
                 <div class="info-section-4">${siteInfo.department}</div>
                 <div class="info-section-5">I live at <span id="current-time"></span> in ${siteInfo.location}.</div>
             </div>
@@ -101,14 +102,16 @@ const sectionData = [
         `
     },
     {
-        id: 2,
-        content: `
-            <div class="align-target">${sectionsData.vision.target}</div>
-            
-            <div class="vision-subgoals">
-                ${generateVisionSubgoals()}
-            </div>
-        `
+    id: 2,
+    content: `
+        <p>${sectionsData.vision.intro}</p>
+        <div class="align-target">${sectionsData.vision.target}</div>
+        <p>More detailed research questions are described below.</p>
+        
+        <div class="vision-subgoals">
+            ${generateVisionSubgoals()}
+        </div>
+    `
     },
     {
         id: 3,
