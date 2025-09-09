@@ -17,7 +17,7 @@ const visionSubgoals = sectionsData.vision.subgoals;
 function generateVisionSubgoals() {
     return visionSubgoals.map((subgoal, index) => `
         <div class="subgoal-section">
-            <div class="subgoal-title">${subgoal.subgoal_title}</div>
+            <div class="subgoal-title">${parseAllText(subgoal.subgoal_title)}</div>
             <div class="subgoal-divider-2px"></div>
             <div class="subgoal-text">${parseAllText(subgoal.subgoal)}</div>
             <div class="subgoal-examples">
@@ -81,20 +81,16 @@ const sectionData = [
                     ${siteInfo.departments.map(department => `<div class="info-section-4"> ${department}</div>`).join('')}
                 </div>
                 <div class="info-section-5">I live at <span id="current-time"></span> in ${siteInfo.location}.</div>
+                <div class="memo">Currently, I am fulfilling my mandatory military service in Korea.</div>
+                <div class="memo">I may not be able to reply in real time, but still I am always happy to receive your messages!</div>
+                <div class="memo"><br>I am in the process of applying to a Ph.D. program and look forward to the possibility of meeting you soon!</div>
             </div>
-            <p>${sectionsData.main.content}</p>
-            <div class="align-target ${sectionsData.main.target_class}">${sectionsData.main.target}</div>
-            <p>In more detail... //
-            Interdisciplinary exploration has been the cornerstone of my approach, including
-            data science, mechanical engineering, embedded systems, bioengineering, and HCI.
-            For three years, I have served as a Research Coordinator at the
-            Center for Contemplative Science, pioneering research into jhana states—
-            deep, rare states of concentrated awareness—  and discovering that
-            humans possess remarkable capacities for robustness and wisdom cultivation.
-
-            While today's AI brings vast knowledge, it struggles to guide us when we're heading in
-            wrong directions or provide the transformative insights that go beyond mere information—
-            this is the challenge I aim to address.
+            <p>${parseAllText(sectionsData.main.content)}</p>
+            <div class="align-target ${sectionsData.main.target_class}">${parseAllText(sectionsData.main.target)}</div>
+            <p>Under this goal, I have taken an interdisciplinary approach, conducting research in areas ranging from
+            Data Science and Contemplative Science to Mechanical Engineering and Design.
+            This includes experience working on several projects designed to aid human cognition 
+            serving as a research coordinator for studies on the meditative state of Jhana.
 
             I find joy in piano improvisation, watching musical, and cooking.</p>
         `
@@ -102,12 +98,12 @@ const sectionData = [
     {
     id: 2,
     content: `
-        <p>${sectionsData.vision.intro}</p>
-        <div class="align-target">${sectionsData.vision.target}</div>
+        <p>${parseAllText(sectionsData.vision.intro)}</p>
+        <div class="align-target">${parseAllText(sectionsData.vision.target)}</div>
         <p>More detailed research questions are described below.</p>
         
         <div class = "callout-content">
-            <span class="callout-title"> ${sectionsData.vision.callout.title} </span>
+            <span class="callout-title"> ${parseAllText(sectionsData.vision.callout.title)} </span>
             ${parseAllText(sectionsData.vision.callout.content)}
         </div>
         
@@ -524,11 +520,11 @@ function updateVerticalDivider(animated = false) {
     const navColumnRect = navColumn.getBoundingClientRect();
     
     // Calculate line start and end points relative to nav column
-    const startValue = activeNavRect.bottom + 36 - navColumnRect.top;
-    const endValue = targetRect.top - 12 - navColumnRect.top;
+    const startValue = activeNavRect.bottom - navColumnRect.top;
+    const endValue = targetRect.top - navColumnRect.top;
 
-    const lineStart = Math.max(startValue, endValue); // bigger value goes lineStart
-    const lineEnd = Math.min(startValue, endValue); // smaller value goes lineEnd
+    const lineStart = Math.max(startValue, endValue) + 54; // bigger value goes lineStart
+    const lineEnd = Math.min(startValue, endValue) - 12; // smaller value goes lineEnd
     
     // Update vertical divider position and height
     const lineHeight = Math.max(0, lineStart - lineEnd);

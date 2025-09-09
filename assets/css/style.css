@@ -526,7 +526,7 @@ body::before{
 
 /* Content Styling - Using Style 4 for paragraphs */
 .content-area p {
-    margin-bottom: 20px;
+    margin-bottom: 3rem;
     color: var(--main-color);
     /* Apply Style 4: 20px, 26px, 1px */
     font-size: var(--text-style-body-size);
@@ -544,6 +544,7 @@ body::before{
     font-size: var(--text-style-body-size);
     line-height: var(--text-style-body-height);
     letter-spacing: var(--text-style-target-spacing);
+    white-space: pre-line;
 }
 
 /* Main page align-target uses Style 4 */
@@ -651,11 +652,21 @@ body::before{
 .info-section-5 {
     background-color: transparent;
     padding: 0;
-    margin: 16px 0 0 0;
+    margin: 16px 0 16px 0;
     line-height: 1;
     font-family: 'normal-haas';
     /* Apply Style 4: 20px, 26px, 1px - For all other text */
     font-size: 18px;
+}
+
+.memo {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    line-height: 1.2;
+    font-family: 'normal-haas';
+    /* Apply Style 4: 20px, 26px, 1px - For all other text */
+    font-size: var(--text-style-example-size);
 }
 
 /* Project Cards Styling */
@@ -834,7 +845,7 @@ body::before{
     font-size: var(--text-style-sub-size);
     line-height: var(--text-style-sub-height);
     letter-spacing: var(--text-style-sub-spacing);
-    
+    white-space: pre-line;
     border: none;
 }
 
@@ -954,12 +965,13 @@ body::before{
 
 .subgoal-examples {
     margin-bottom: 0.4rem; /* 예시 섹션 하단 여백 */
+    white-space: pre-line;
 }
 
 
 /* 기존 .subgoal-section 수정 (Line 953-955) */
 .subgoal-section {
-    margin-bottom: 6rem; /* 기존 5rem에서 1rem 증가 */
+    margin-bottom: 6rem;
 }
 
 /* 새로운 subgoal-title-new 스타일 추가 */
@@ -977,12 +989,13 @@ body::before{
 .subgoal-text {
     font-family: 'target-haas';
     color: var(--main-color);
-    margin-bottom: 2rem; /* subgoal과 examples 간 간격 */
+    margin-bottom: 1rem; /* subgoal과 examples 간 간격 */
     /* Body text size 사용 */
     font-size: var(--text-style-body-size);
     line-height: var(--text-style-body-height);
     letter-spacing: var(--text-style-body-spacing);
     font-weight: bold;
+    white-space: pre-line;
 }
 
 /* 기존 .subgoal-divider-1px 수정 - margin을 두 배로 */
@@ -990,7 +1003,7 @@ body::before{
     width: 100%;
     height: 1px;
     background-color: var(--line-color);
-    margin: 3rem 0 4px 0; /* 기존 2px 0에서 두 배로 */
+    margin: 2rem 0 4px 0;
     border: none;
 }
 
@@ -1024,6 +1037,7 @@ body::before{
     font-size: var(--text-style-body-size);
     line-height: var(--text-style-body-height);
     letter-spacing: var(--text-style-body-spacing);
+    white-space: pre-line;
 }
 
 /* Quote Reference - Right aligned */
@@ -1072,15 +1086,18 @@ body::before{
     font-size: var(--text-style-body-size);
     line-height: var(--text-style-body-height);
     letter-spacing: var(--text-style-body-spacing);
+    white-space: pre-line;
+    margin-bottom: 1rem;
 }
 
 /* Sub Text Styling */
 .sub-text {
     font-size: var(--text-style-sub-text-size);
     line-height: inherit;
-    letter-spacing: inherit;
+    letter-spacing: var(--text-style-sub-spacing);
     color: var(--sub-color);
-    font-family: inherit;
+    font-family: 'normal-helv';
+    white-space: pre-line;
 }
 
 .callout-content {
@@ -1091,7 +1108,7 @@ body::before{
     line-height: var(--text-style-example-height);
     letter-spacing: var(--text-style-example-spacing);
     margin-bottom: 6rem;
-    text-align: justify;
+    white-space: pre-line;
 }
 
 
@@ -1102,7 +1119,6 @@ body::before{
     line-height: var(--text-style-example-height);
     letter-spacing: var(--text-style-example-spacing);
     margin-right: 2rem;
-  
 }
 
 .callout-content a {
