@@ -78,10 +78,10 @@ const sectionData = [
                     ).join('')}
                 </div>
                 <div class="info-section-2">${siteInfo.name}</div>
-                <div class="degrees">
-                    ${siteInfo.degree.map(degree => `<div class="info-section-3">| ${degree}</div>`).join('')}
+                <div class="info-section-3">${siteInfo.degree}</div>
+                <div class="departments">
+                    ${siteInfo.departments.map(department => `<div class="info-section-4">| ${department}</div>`).join('')}
                 </div>
-                <div class="info-section-4">${siteInfo.department}</div>
                 <div class="info-section-5">I live at <span id="current-time"></span> in ${siteInfo.location}.</div>
             </div>
             <p>${sectionsData.main.content}</p>

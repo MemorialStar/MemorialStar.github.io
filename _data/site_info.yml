@@ -1,6 +1,6 @@
 name: "YOUNG MIN, JUNG."
 degree: "B.Sc at KAIST"
-department:
+departments:
   - School of Transdisciplinary Studies
   - Dept. Mechanical Eng.
   - School of Computing
@@ -17,6 +17,6 @@ social_links:
     url: "mailto:your-email@example.com"
 
 profile_image: "assets/img/me.jpg"
-favicon: "assets/img/youngmin.jpg"
+favicon: "assets/img/youngmin.svg"
 
 

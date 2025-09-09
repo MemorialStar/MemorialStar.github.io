@@ -174,24 +174,29 @@ body::before{
     --text-style-nav-spacing: 0px;
     
     /* Style 3: 24px, 32px, 3px - For align-targets (except Main) and info-section-3 */
-    --text-style-target-size: 30px;
+    --text-style-target-size: 28px;
     --text-style-target-height: 36px;
     --text-style-target-spacing: 0px;
     
     /* Style 4: 20px, 32px, 1px - For all other text */
-    --text-style-body-size: 20px;
-    --text-style-body-height: 32px;
+    --text-style-body-size: 18px;
+    --text-style-body-height: 27px;
     --text-style-body-spacing: -0.05px;
 
+    /* Style 5: 20px, 32px, 1px - examples */
+    --text-style-example-size: 18px;
+    --text-style-example-height: 27px;
+    --text-style-example-spacing: -0.05px;
+    
     /* nav length */
     --gap-width: 40px;
-    --main-margin: min(200px, calc((100vw / 8)));
+    --main-margin: min(140px, calc((100vw / 10)));
     --main-container-margin: min(250px, calc((100vw/8)));
-    --nav-length: max(275px, calc((100vw - 2*var(--main-margin) - var(--gap-width)) / 6));
+    --nav-length: max(300px, calc((100vw - 2*var(--main-margin) - var(--gap-width)) / 6));
 
     /*main content padding*/
-    --main-contents-padding: 5rem;
-    --nav-horizontal-line-length: calc(15px + 19rem);
+    --main-contents-padding: 72px;
+    --nav-horizontal-line-length: calc(36px + 19rem);
     
     /* Me.png image variables */
     --me-image-height: 16rem;
@@ -353,7 +358,7 @@ body::before{
     align-items: center;
     justify-content: center;
     color: white;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 /* News section styling */
@@ -396,7 +401,7 @@ body::before{
 
 /* Navigation Items - Using Style 2 */
 .nav-item {
-    padding-left: 15px;
+    padding-left: 3rem;
     padding-bottom: 0px;
     margin-bottom: 15px;
     cursor: pointer;
@@ -598,7 +603,7 @@ body::before{
 /* Info Section 2 - Name - Using Style 2 */
 .info-section-2 {
     padding: 0;
-    margin: 4px 0 0 0;
+    margin: 16px 0 0 0;
     font-family: 'title-haas';
     font-weight: bold;
     border-top: 2px solid var(--line-color);
