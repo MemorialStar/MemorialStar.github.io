@@ -60,7 +60,7 @@ vision:
         - "Could we co-author a 1,000-page novel with an AI? Could it develop the storyline from the very beginning to deliver a final twist and emotional impact?"
         - "Can a smoking cessation AI analyze a user's behavior patterns, distinguish between a situation where they are habitually about to smoke after a meal and one where they are mentally exhausted from a long day at work, and then set a tailored strategy to guide the user gently?"
         - "Can an AI persuade a person? Before that, in matters where there is no right or wrong, how do people persuade one another? Why are some better than others at this process of actively conversing with the other party to grasp their demands and logical structure, identifying the ultimate higher goal of the conversation itself, and then selecting the most effective evidence and sequence to lead the dialogue toward that goal?"
-        - "Can an AI perform a piece of music with its own interpretation? As in this video, can it understand the emotional intent and context hidden behind the melody and perform by modulating the sound to express it better?"
+        - "Can an AI perform a piece of music with its own interpretation? As in this <a href="https://www.youtube.com/shorts/-xxldUSui0s">video</a>, can it understand the emotional intent and context hidden behind the melody and perform by modulating the sound to express it better?"
 
     - subgoal_title: "Robustness"
       subgoal: "How do we have resilience in latent space and maintain a set intention?"
