@@ -1,0 +1,74 @@
+/* === Publications: card, content, main, sub, title, year, organization, link === */
+
+.publications-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 20px;
+}
+
+.publication-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+
+.publication-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 5rem;
+}
+
+.publication-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 4px;
+}
+
+.publication-title {
+    font-family: 'normal-haas';
+    color: var(--main-color);
+    margin: 0;
+    flex: 1;
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+.publication-year {
+    font-family: 'normal-haas';
+    color: var(--main-color);
+    flex-shrink: 0;
+    font-size: var(--text-style-body-size);
+    letter-spacing: var(--text-style-body-spacing);
+}
+
+.publication-sub {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: var(--text-style-body-size);
+    line-height: var(--text-style-body-height);
+    letter-spacing: var(--text-style-body-spacing);
+    margin-bottom: 4px;
+}
+
+.publication-link {
+    font-family: 'normal-helv';
+    text-decoration-color: var(--accent-color);
+}
+
+.publication-organization {
+    font-family: 'bold-haas';
+    font-size: var(--text-style-sub-size);
+    line-height: var(--text-style-sub-height);
+    letter-spacing: var(--text-style-sub-spacing);
+    text-align: right;
+}

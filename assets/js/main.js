@@ -3,7 +3,7 @@
  * Main JavaScript functionality with Jekyll data integration
  */
 
-// Jekyll 데이터에서 가져오기
+// === Data Loading ===
 const siteInfo = window.jekyllData.siteInfo;
 const projectData = window.jekyllData.projects;
 const publicationData = window.jekyllData.publications;
@@ -13,7 +13,7 @@ const sectionsData = window.jekyllData.sections;
 // Vision Subgoal Data는 sections 데이터에서 가져오기
 const visionSubgoals = sectionsData.vision.subgoals;
 
-// Function to generate vision subgoals HTML
+// === Rendering ===
 function generateVisionSubgoals() {
     return visionSubgoals.map((subgoal, index) => `
         <div class="subgoal-section">
@@ -33,34 +33,50 @@ function generateVisionSubgoals() {
     `).join('');
 }
 
-// Function to toggle subgoal detail visibility with smooth animation
+// Open/close the subgoal-detail element. The AbortController-per-invocation
+// pattern lets a follow-up click cancel any in-flight transitionend handler,
+// which would otherwise fire after display:none and clobber max-height.
 function toggleSubgoalDetail(index) {
     const detailElement = document.getElementById(`subgoal-detail-${index}`);
+    if (!detailElement) return;
+    if (detailElement._toggleAbort) detailElement._toggleAbort.abort();
+    const ac = new AbortController();
+    detailElement._toggleAbort = ac;
     const isVisible = detailElement.style.display !== 'none';
-    
+
     if (isVisible) {
-        // Fade out and collapse
+        // Lock current measured height so the close transition starts from a defined value.
+        detailElement.style.maxHeight = detailElement.scrollHeight + 'px';
+        // Force reflow before transitioning to 0.
+        void detailElement.offsetHeight;
         detailElement.style.opacity = '0';
         detailElement.style.maxHeight = '0';
         detailElement.style.paddingTop = '0';
         detailElement.style.paddingBottom = '0';
-        setTimeout(() => {
+        detailElement.addEventListener('transitionend', (event) => {
+            if (event.propertyName !== 'max-height') return;
             detailElement.style.display = 'none';
-        }, 300); // 0.3초 후 완전히 숨김
+            ac.abort();
+        }, { signal: ac.signal });
     } else {
-        // Show and fade in
         detailElement.style.display = 'block';
         detailElement.style.opacity = '0';
         detailElement.style.maxHeight = '0';
         detailElement.style.paddingTop = '0';
         detailElement.style.paddingBottom = '0';
-        
-        // Force reflow
-        detailElement.offsetHeight;
-        
-        // Animate in
+
+        // Force reflow before measurement so the browser commits display:block.
+        void detailElement.offsetHeight;
+
         detailElement.style.opacity = '1';
-        detailElement.style.maxHeight = '1500px'; // 충분한 높이
+        detailElement.style.maxHeight = detailElement.scrollHeight + 'px';
+
+        detailElement.addEventListener('transitionend', (event) => {
+            if (event.propertyName !== 'max-height') return;
+            // Unpin so subsequent content changes are not capped.
+            detailElement.style.maxHeight = 'none';
+            ac.abort();
+        }, { signal: ac.signal });
     }
 }
 
@@ -281,6 +297,7 @@ function initializeNavsubContainer() {
     // Create me.png image element
     const meImage = document.createElement('img');
     meImage.src = siteInfo.profile_image;
+    meImage.alt = `Portrait of ${siteInfo.name}`;
     meImage.className = 'me-image';
 
     // Create news section
@@ -367,13 +384,16 @@ function attachEventListeners() {
  * Handle navigation item clicks
  */
 function handleNavClick(event) {
+    // Short-circuit any implicit button activation semantics (defensive
+    // against older WebKit) before delegating to the SPA section switch.
+    event.preventDefault();
     if (isAnimating) return;
-    
+
     const clickedItem = event.currentTarget;
     const sectionId = parseInt(clickedItem.dataset.section);
-    
+
     if (sectionId === currentSection) return;
-    
+
     switchSection(sectionId);
 }
 
@@ -396,12 +416,14 @@ function switchSection(newSectionId) {
     
     // Wait for slide-out animation to complete
     setTimeout(() => {
-        // Step 2: Update active states
+        // Step 2: Update active state classList + aria-current.
         navItems.forEach(item => {
             if (parseInt(item.dataset.section) === newSectionId) {
                 item.classList.add('active');
+                item.setAttribute('aria-current', 'page');
             } else {
                 item.classList.remove('active');
+                item.removeAttribute('aria-current');
             }
         });
         
@@ -421,18 +443,15 @@ function switchSection(newSectionId) {
                 contentArea.classList.remove('slide-out');
                 contentArea.classList.add('slide-in');
                 
-                // Animate navsubContainer in if switching to Main section (section 1)
-                if (newSectionId === 1 && navsubContainer) {
-                    navsubContainer.classList.remove('navsubContainer-slide-out');
-                    navsubContainer.classList.add('navsubContainer-slide-in');
-                } else if (newSectionId !== 1 && navsubContainer) {
-                    // Hide navsubContainer for non-main sections
-                    navsubContainer.style.display = 'none';
-                }
-                if (newSectionId === 1 && navsubContainer) {
-                    navsubContainer.style.display = 'flex';
-                    navsubContainer.classList.remove('navsubContainer-slide-out');
-                    navsubContainer.classList.add('navsubContainer-slide-in');
+                // Show + animate navsubContainer in for Main; hide for other sections.
+                if (navsubContainer) {
+                    if (newSectionId === 1) {
+                        navsubContainer.style.display = 'flex';
+                        navsubContainer.classList.remove('navsubContainer-slide-out');
+                        navsubContainer.classList.add('navsubContainer-slide-in');
+                    } else {
+                        navsubContainer.style.display = 'none';
+                    }
                 }
                 
                 // Update current section
@@ -454,53 +473,57 @@ function switchSection(newSectionId) {
     }, 500);
 }
 
+// === Section Switching ===
+
 /**
  * Load section content into the content area
  */
 function loadSectionContent(sectionId, animate = false) {
     const section = sectionData.find(s => s.id === sectionId);
-    if (section) {
-        contentArea.innerHTML = section.content;
-        
-        // Use a slight delay to ensure the DOM has rendered
-        setTimeout(() => {
-            const alignTarget = document.querySelector('.align-target');
-            const contentColumn = document.querySelector('.content-column');
+    if (!section) return;
+    contentArea.innerHTML = section.content;
 
-            if (alignTarget && contentColumn) {
-                // Remove existing lines before adding a new one
-                const existingLines = alignTarget.querySelectorAll('.horizontal-line');
-                existingLines.forEach(line => line.remove());
+    // Measure .align-target width only after 'target-haas' (the font used by
+    // .align-target) finishes loading. font-display:swap would otherwise repaint
+    // and shift the measurement after we set .horizontal-line's width. rAF gates
+    // the measurement behind the innerHTML commit above.
+    const measureHorizontalLine = () => {
+        const alignTarget = document.querySelector('.align-target');
+        const contentColumn = document.querySelector('.content-column');
+        if (!alignTarget || !contentColumn) return;
 
-                // Create and append the new line
-                const horizontalLine = document.createElement('div');
-                horizontalLine.className = 'horizontal-line';
-                alignTarget.appendChild(horizontalLine);
-                
-                const computedStyle = window.getComputedStyle(contentColumn);
-                const paddingLeft = parseInt(computedStyle.getPropertyValue('padding-left'), 10);
-                
-                // This offsetWidth should now be correct
-                const textWidth = alignTarget.offsetWidth;
-                
-                horizontalLine.style.width = `calc(${textWidth + paddingLeft}px + 3rem)`;
-            }
+        const existingLines = alignTarget.querySelectorAll('.horizontal-line');
+        existingLines.forEach(line => line.remove());
 
-            // Other initializations after content is fully rendered
-            if (sectionId === 1) {
-                initializeClock();
-                // Position news section after content loads
-                setTimeout(() => positionNewsSection(), 100);
-            }
-            if (sectionId === 3) {
-                renderProjectCards();
-            }
-            if (sectionId === 4) {
-                renderPublicationCards();
-            }
-        }, 50); // A small delay
-    }
+        const horizontalLine = document.createElement('div');
+        horizontalLine.className = 'horizontal-line';
+        alignTarget.appendChild(horizontalLine);
+
+        const computedStyle = window.getComputedStyle(contentColumn);
+        const paddingLeft = parseInt(computedStyle.getPropertyValue('padding-left'), 10);
+        const textWidth = alignTarget.offsetWidth;
+        horizontalLine.style.width = `calc(${textWidth + paddingLeft}px + 3rem)`;
+    };
+
+    requestAnimationFrame(() => {
+        document.fonts.load('1em target-haas').then(() => {
+            requestAnimationFrame(measureHorizontalLine);
+        });
+
+        if (sectionId === 1) {
+            initializeClock();
+            setTimeout(() => positionNewsSection(), 100);
+        }
+        if (sectionId === 3) {
+            renderProjectCards();
+        }
+        if (sectionId === 4) {
+            renderPublicationCards();
+        }
+    });
 }
+
+// === Layout & Divider ===
 
 /**
  * Update vertical divider line position - New core functionality
@@ -513,11 +536,15 @@ function updateVerticalDivider(animated = false) {
     const navColumn = document.querySelector('.nav-column');
     
     if (!alignTarget || !activeNavItem || !verticalDivider || !navColumn) return;
-    
+
     // Get positions relative to viewport
     const targetRect = alignTarget.getBoundingClientRect();
     const activeNavRect = activeNavItem.getBoundingClientRect();
     const navColumnRect = navColumn.getBoundingClientRect();
+
+    // Below 1024px .nav-column is display:none; getBoundingClientRect returns
+    // a zero rect. Bail out instead of writing meaningless top/height styles.
+    if (navColumnRect.width === 0 && navColumnRect.height === 0) return;
     
     // Calculate line start and end points relative to nav column
     const startValue = activeNavRect.bottom - navColumnRect.top;
@@ -546,6 +573,8 @@ function updateVerticalDivider(animated = false) {
         }, 300);
     }
 }
+
+// === Utilities ===
 
 /**
  * Initialize and update real-time clock for KST
@@ -602,13 +631,7 @@ function debounce(func, wait) {
     };
 }
 
-// DOM이 완전히 로드된 후 스크립트를 실행합니다.
-document.addEventListener('DOMContentLoaded', () => {
-    renderProjectCards();
-    renderPublicationCards();
-});
-
-// Initialize the application when DOM is ready
+// Initialize the application when DOM is ready.
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {

@@ -4,11 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
-    
+
+    <meta name="description" content="{{ site.description }}">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="{{ site.title }}">
+    <meta property="og:description" content="{{ site.description }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:image" content="{{ '/assets/img/me.jpg' | absolute_url }}">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="ko_KR">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ site.title }}">
+    <meta name="twitter:description" content="{{ site.description }}">
+    <meta name="twitter:image" content="{{ '/assets/img/me.jpg' | absolute_url }}">
+
+    <!-- JSON-LD Person -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "{{ site.title }}",
+      "url": "{{ site.url }}",
+      "inLanguage": "en",
+      "affiliation": {
+        "@type": "EducationalOrganization",
+        "name": "KAIST"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/j0min/",
+        "https://x.com/young_min_Jung"
+      ]
+    }
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="{{ site.data.site_info.favicon | relative_url }}">
     <link rel="stylesheet" href="{{ 'assets/css/style.css' | relative_url }}">
 </head>
 <body>
+    <!-- Shown below 1024px; the responsive layout is not built yet. -->
+    <div class="desktop-only-notice" role="alert">
+        <p>This site is best viewed on a desktop (≥1024px). A mobile-friendly version is in progress.</p>
+    </div>
+
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <!-- background layer -->
@@ -47,18 +89,18 @@
         <div class="nav-container" id="navsubContainer"></div>
 
         <div class="nav-container" id="navContainer">
-            <div class="nav-item active" data-section="1">
+            <button class="nav-item active" data-section="1" type="button" aria-current="page">
                 <span>Main</span>
-            </div>
-            <div class="nav-item" data-section="2">
+            </button>
+            <button class="nav-item" data-section="2" type="button">
                 <span>Vision</span>
-            </div>
-            <div class="nav-item" data-section="3">
+            </button>
+            <button class="nav-item" data-section="3" type="button">
                 <span>Projects</span>
-            </div>
-            <div class="nav-item" data-section="4">
+            </button>
+            <button class="nav-item" data-section="4" type="button">
                 <span>Publications</span>
-            </div>
+            </button>
         </div>
     </nav>
     
