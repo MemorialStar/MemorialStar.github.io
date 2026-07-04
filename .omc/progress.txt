@@ -1,0 +1,57 @@
+# Ralph Progress Log — MemorialStar Web-Baseline Refactor
+
+## Iteration 1 (2026-06-08) — COMPLETE
+- PRD refined with 17 task-specific stories from .omc/plans/mstar-web-baseline-refactor-plan.md v4
+- Reviewer: requested codex but auth token invalidated (401); fell back to Claude critic agent
+- All 17 stories: passes: true
+
+### Phase 1 (Foundation) — DONE
+- Created 8 _sass/ partials by selector domain (_base, _layout, _nav, _content, _projects, _publications, _vision, _utilities)
+- Replaced assets/css/style.css with assets/css/style.scss using @use entry imports
+- Inserted 5 role-grouped section headers in assets/js/main.js (Data Loading, Rendering, Section Switching, Layout & Divider, Utilities)
+- Sass partition invariant honored: each selector lives in exactly one partial
+- Note: .content-column placed in _layout.scss (more natural home; PRD AC said _content but layout is structural)
+- npx sass standalone compile + bundle exec jekyll build both pass
+
+### Phase 2 (Behavior + Viewport) — DONE
+- <meta viewport> already at default.html:5 (spec misdiagnosed as missing; verified, not duplicated)
+- desktop-only-notice <div role="alert"> in default.html; @media (max-width: 1023.98px) in _utilities.scss hides .page-wrapper + .nav-column and shows the notice
+- updateVerticalDivider zero-rect guard (R4 mitigation) so it bails out when nav-column is display:none below 1024px
+- 7 bugs fixed: A (alt on me-image), B (nav <div> -> <button> + type=button + preventDefault + aria-current toggle + neutralized button defaults), C (scrollHeight + transitionend + AbortController for spam-click safety), D (.news-content white-space:pre-line), E (DOMContentLoaded duplicate render listener removed; verified no-op against null container at that timing), F (document.fonts.load('1em target-haas') gating .horizontal-line measurement; replaced 50ms setTimeout hack), J (visible :focus-visible outline)
+- Critic identified MAJOR transitionend listener leak on spam-click; fixed with AbortController per invocation stashed on element
+- US-P2-009 Lighthouse + 6-item smoke checklist: documented as pending manual run at .omc/lighthouse/phase2-pending.md (Ralph cannot drive a browser)
+
+### Phase 3 (Metadata + Authoring) — DONE
+- _config.yml url -> https://www.youngminjung.com (matches CNAME)
+- jekyll-sitemap added to Gemfile + _config.yml plugins; bundle install + jekyll build produce _site/sitemap.xml
+- Added logger/csv/base64 gems to Gemfile (Ruby 4.0 stdlib compat for local development; not relevant on GH Pages)
+- Full <head> metadata block in _layouts/default.html: meta description, canonical, OG (type/title/description/url/image/locale en_US + alternate ko_KR), Twitter summary_large_image, JSON-LD Person (name, url, inLanguage en, affiliation KAIST, sameAs LinkedIn+X)
+- robots.txt at repo root with sitemap pointer
+- docs/AUTHORING.md with 5 sections: project entry, publication, news, image rule, new-section warning
+
+### Deslop pass (Step 7.5) — DONE
+- Stripped task labels (Bug A/B/C/E/F, R4, "Step 2:") from inline comments per CLAUDE.md guideline ("Don't reference the current task, fix, or callers")
+- Removed verbose "code archaeology" Bug E removal comment block per CLAUDE.md ("Avoid // removed comments for removed code")
+- Collapsed redundant navsubContainer display-flex/none block in switchSection (Optimality #5 from critic)
+- Kept all behavior-explaining comments that capture non-obvious WHY (e.g. font-display swap shift, AbortController rationale, R4 zero-rect bail)
+
+### Regression re-verify (Step 7.6) — DONE
+- bundle exec jekyll build exits 0 (0.061s)
+- _site/index.html has all 15 head-tag references intact (OG/Twitter/JSON-LD/canonical/description/viewport)
+- _site/sitemap.xml valid XML
+- _site/robots.txt correct content
+- node --check assets/js/main.js parses cleanly
+- _site/assets/css/style.css compiles from SCSS
+
+## Codebase facts captured during execution
+- Ruby 4.0.5 (Homebrew) installed for local builds; system Ruby 2.6 unusable for bundler 2.6.x
+- Jekyll 4.4.1 + jekyll-sass-converter 3.1.0 supports @use directives (Dart Sass / sass-embedded)
+- 9 @font-face declarations in style.css use font-display:swap (style.css:8,16,24,33,41,49,57,65,73 in original; preserved in _sass/_base.scss after split)
+- .align-target uses target-haas, NOT bold-haas (style.css:543, 553 in original)
+- 12 white-space:pre-line declarations in original (verified grep -c); one removed during split (was duplicated on .subgoal-detail-content); one new on .news-content; net effect 12
+
+## Pending manual verification (out of Ralph scope)
+- .omc/lighthouse/phase2.json (Lighthouse Desktop run on http://localhost:4000)
+- 6-item smoke checklist in 3 browsers (Chromium/Firefox/Safari)
+- LinkedIn/Twitter/Slack share-card preview after deploy
+- Google Rich Results test on deployed JSON-LD

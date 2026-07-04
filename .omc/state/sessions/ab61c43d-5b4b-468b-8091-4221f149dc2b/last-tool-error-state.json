@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"ls /Users/min/.claude/projects/-Users-min-Documents-GitHub-MemorialStar-github-io/memory/ 2>/dev/null; echo \\\"---\\\"; cat /Users/min/.claude/projects/-Users-min-Documents-GitHub-MemorialSta...",
+  "error": "Exit code 1\n---",
+  "timestamp": "2026-06-08T16:40:43.939Z",
+  "retry_count": 1
+}

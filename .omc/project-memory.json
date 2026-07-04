@@ -1,0 +1,130 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1783201720952,
+  "projectRoot": "/Users/min/Documents/GitHub/MemorialStar.github.io",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Ruby",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "Gemfile"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "bundler",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "assets",
+      "docs"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "_data": {
+      "path": "_data",
+      "purpose": null,
+      "fileCount": 5,
+      "lastAccessed": 1783201720936,
+      "keyFiles": [
+        "news.yml",
+        "projects.yml",
+        "publications.yml",
+        "sections.yml",
+        "site_info.yml"
+      ]
+    },
+    "_layouts": {
+      "path": "_layouts",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1783201720936,
+      "keyFiles": [
+        "default.html"
+      ]
+    },
+    "_sass": {
+      "path": "_sass",
+      "purpose": null,
+      "fileCount": 8,
+      "lastAccessed": 1783201720937,
+      "keyFiles": [
+        "_base.scss",
+        "_content.scss",
+        "_layout.scss",
+        "_nav.scss",
+        "_projects.scss"
+      ]
+    },
+    "_site": {
+      "path": "_site",
+      "purpose": null,
+      "fileCount": 7,
+      "lastAccessed": 1783201720937,
+      "keyFiles": [
+        "404.html",
+        "CNAME",
+        "feed.xml",
+        "index.html",
+        "robots.txt"
+      ]
+    },
+    "assets": {
+      "path": "assets",
+      "purpose": "Static assets",
+      "fileCount": 0,
+      "lastAccessed": 1783201720937,
+      "keyFiles": []
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 1,
+      "lastAccessed": 1783201720937,
+      "keyFiles": [
+        "AUTHORING.md"
+      ]
+    },
+    "_site/assets": {
+      "path": "_site/assets",
+      "purpose": "Static assets",
+      "fileCount": 1,
+      "lastAccessed": 1783201720938,
+      "keyFiles": []
+    },
+    "_site/docs": {
+      "path": "_site/docs",
+      "purpose": "Documentation",
+      "fileCount": 1,
+      "lastAccessed": 1783201720938,
+      "keyFiles": [
+        "AUTHORING.md"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

@@ -1,0 +1,264 @@
+{
+  "projectName": "MemorialStar Web-Baseline Refactor (pre-mobile)",
+  "sourcePlan": ".omc/plans/mstar-web-baseline-refactor-plan.md",
+  "sourceSpec": ".omc/specs/deep-interview-mstar-web-baseline-refactor.md",
+  "reviewer": "codex",
+  "stories": [
+    {
+      "id": "US-P1-001",
+      "phase": 1,
+      "priority": 1,
+      "title": "Create _sass/ partials by selector domain",
+      "description": "Audit assets/css/style.css (1133 lines), partition into 8 partials under _sass/ following the target partitioning in plan step 2. Each selector must appear in exactly one partial.",
+      "acceptanceCriteria": [
+        "_sass/ directory exists at repo root",
+        "_sass/_base.scss contains @font-face declarations and root/* rules",
+        "_sass/_layout.scss contains .page-wrapper, .left-margin, .right-margin, .main-container, .sky-blue-gap, .content-wrapper, .background-image-layer rules",
+        "_sass/_nav.scss contains .nav-column, .nav-container, .navsubContainer, .nav-item, .vertical-divider, .me-image, .news-section, .news-item rules",
+        "_sass/_content.scss contains .content-column, .content-area, .info-section-*, .align-target, .horizontal-line, .highlight, .sub-text, .callout-* rules",
+        "_sass/_projects.scss contains .project-* and .tag.* rules",
+        "_sass/_publications.scss contains .publication-* rules",
+        "_sass/_vision.scss contains .vision-subgoals, .subgoal-* rules",
+        "_sass/_utilities.scss contains @keyframes, .slide-*, .navsubContainer-slide-*, transitions",
+        "No selector appears in two partials (verifiable via grep -l)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P1-002",
+      "phase": 1,
+      "priority": 2,
+      "title": "Replace style.css with style.scss entry",
+      "description": "Create assets/css/style.scss with @use imports of all 8 partials. Delete assets/css/style.css after verifying compiled _site output matches.",
+      "acceptanceCriteria": [
+        "assets/css/style.scss exists with Jekyll front matter (--- / ---)",
+        "style.scss uses @use 'base'; @use 'layout'; @use 'nav'; @use 'content'; @use 'projects'; @use 'publications'; @use 'vision'; @use 'utilities'; (fallback to @import if Dart Sass version unsupported)",
+        "assets/css/style.css is deleted from the repo",
+        "bundle exec jekyll build exits 0 with no new Sass deprecation warnings",
+        "_site/assets/css/style.css is regenerated and visually equivalent to the pre-refactor output (ImageMagick compare -metric AE -fuzz 1% shows zero structural diffs across initial-load screenshots of sections 1/2/3/4 at 1920x1080)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P1-003",
+      "phase": 1,
+      "priority": 3,
+      "title": "Insert 5 role-grouped section headers in main.js",
+      "description": "Add 5 comment headers in assets/js/main.js without moving function bodies. Zero behavior change.",
+      "acceptanceCriteria": [
+        "main.js contains // === Data Loading === above the const siteInfo line",
+        "main.js contains // === Rendering === above generateVisionSubgoals()",
+        "main.js contains // === Section Switching === above loadSectionContent()",
+        "main.js contains // === Layout & Divider === above updateVerticalDivider()",
+        "main.js contains // === Utilities === above initializeClock()",
+        "git diff shows ONLY comment-insertion lines and (at most) whitespace; no function-body reordering",
+        "All existing features (section switch, subgoal expand, clock, card render) still work identically after the edit"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-001",
+      "phase": 2,
+      "priority": 4,
+      "title": "Add <1024px desktop-only notice (CSS + HTML)",
+      "description": "Add .desktop-only-notice element to default.html and CSS @media (max-width: 1023.98px) rule in _utilities.scss that hides .page-wrapper + .nav-column and shows the notice. Plus updateVerticalDivider guard for hidden state (R4 mitigation).",
+      "acceptanceCriteria": [
+        "_layouts/default.html contains <div class=\"desktop-only-notice\" role=\"alert\"><p>...desktop...</p></div> after <body>",
+        "_sass/_utilities.scss contains @media (max-width: 1023.98px) rule that sets .page-wrapper and .nav-column display:none, .desktop-only-notice display:flex fixed inset:0",
+        "At viewport 1023px the notice is visible and the page-wrapper is hidden",
+        "At viewport 1024px the notice is hidden and the page-wrapper is visible",
+        "updateVerticalDivider in main.js early-returns if activeNavItem.getBoundingClientRect() returns zero dimensions (avoids errors when nav-column is display:none below 1024px)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-002",
+      "phase": 2,
+      "priority": 5,
+      "title": "Bug A - profile image alt",
+      "description": "Set meImage.alt to a meaningful string at initializeNavsubContainer.",
+      "acceptanceCriteria": [
+        "assets/js/main.js initializeNavsubContainer sets meImage.alt to `Portrait of ${siteInfo.name}` (or equivalent non-empty descriptive string) before appendChild",
+        "DOM inspect after load shows <img class=\"me-image\" alt=\"Portrait of YOUNG MIN, JUNG.\" ...>"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-003",
+      "phase": 2,
+      "priority": 6,
+      "title": "Bug B - nav as <button> + aria + neutralization",
+      "description": "Change <div class=\"nav-item\"> to <button class=\"nav-item\" type=\"button\">. Add event.preventDefault() in handleNavClick. Add aria-current=\"page\" on active item. Neutralize default <button> styling in _nav.scss without breaking layout.",
+      "acceptanceCriteria": [
+        "_layouts/default.html has 4 <button class=\"nav-item\" data-section=\"N\" type=\"button\"> elements replacing the prior 4 <div class=\"nav-item\"> elements",
+        "Initial markup sets aria-current=\"page\" on the section-1 button",
+        "switchSection updates aria-current=\"page\" on the newly active button and removes it from inactive ones",
+        "handleNavClick calls event.preventDefault() at the top",
+        "_sass/_nav.scss has neutralization (appearance:none; background:none; border:none; padding:0; font:inherit; color:inherit; cursor:pointer) BEFORE the existing .nav-item layout rules",
+        "Tab key cycles through the 4 nav buttons; pressing Enter or Space activates the focused button",
+        "Visible focus outline appears on the focused nav button (via :focus-visible)",
+        "Section switching behaves identically to pre-refactor (clicking switches sections without page reload)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-004",
+      "phase": 2,
+      "priority": 7,
+      "title": "Bug C - replace max-height 1500px with scrollHeight + transitionend",
+      "description": "Rewrite toggleSubgoalDetail open/close to use scrollHeight measurement, transitionend listener, and final max-height:none on open so content > 1500px is not truncated.",
+      "acceptanceCriteria": [
+        "On open, main.js sets detailElement.style.maxHeight = detailElement.scrollHeight + 'px'",
+        "On transitionend (or via setTimeout matching the CSS transition duration as fallback), maxHeight is set to 'none'",
+        "On close, main.js first sets maxHeight = scrollHeight + 'px', forces reflow via void detailElement.offsetHeight, then sets maxHeight = '0'",
+        "Manual test: inject a <p> > 1500px tall into one subgoal-detail in DevTools and click Detail >; the entire content shows without truncation",
+        "Open then close cycle works smoothly with no flash of full content and no visual jump"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-005",
+      "phase": 2,
+      "priority": 8,
+      "title": "Bug D - news YAML line breaks via CSS",
+      "description": "Add .news-content { white-space: pre-line; } to _sass/_nav.scss. Keep newsContent.textContent = news.content in main.js (no innerHTML).",
+      "acceptanceCriteria": [
+        "_sass/_nav.scss contains .news-content { white-space: pre-line; }",
+        "main.js initializeNavsubContainer still uses newsContent.textContent = news.content (NOT innerHTML)",
+        "Manual test: a news item with a literal \\n in its YAML content block shows a visible line break in the rendered output"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-006",
+      "phase": 2,
+      "priority": 9,
+      "title": "Bug E - verify-then-dedup duplicate render listener",
+      "description": "Diagnose whether main.js:606-609 DOMContentLoaded listener does any work. Per Architect analysis, getElementById returns null at that timing so renderProjectCards/renderPublicationCards early-return. If confirmed no-op, delete the block; otherwise add idempotency guard.",
+      "acceptanceCriteria": [
+        "main.js:606-609 DOMContentLoaded listener block is either (a) removed because verified no-op (commit message documents the verification), or (b) replaced with an idempotency guard so renderProjectCards/renderPublicationCards run exactly once per section load",
+        "Console instrumentation confirms exactly one call to renderProjectCards on first section-3 visit (no duplicates from the deleted listener)",
+        "Section 3 (Projects) and Section 4 (Publications) still render their cards correctly on first visit and on re-visits"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-007",
+      "phase": 2,
+      "priority": 10,
+      "title": "Bug F - document.fonts.load('1em target-haas') guard",
+      "description": "Replace the 50ms setTimeout in loadSectionContent that computes .horizontal-line width with document.fonts.load('1em target-haas').then(...). target-haas is the font used by .align-target per style.css:543, 553.",
+      "acceptanceCriteria": [
+        "main.js loadSectionContent computes .horizontal-line width inside document.fonts.load('1em target-haas').then(() => { ... }) callback",
+        "The setTimeout(..., 50) hack at main.js:466 is removed",
+        "After document.fonts.load resolves, .horizontal-line.offsetWidth does not change by more than 1px for 2 seconds under DevTools Network throttle \"Slow 3G\" (verified via temporary ResizeObserver or polled snapshots; instrumentation removed before commit)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-008",
+      "phase": 2,
+      "priority": 11,
+      "title": "Bug J - visible :focus-visible styles",
+      "description": "Add :focus-visible CSS rules to _sass/_utilities.scss covering all interactive elements (a, button, .nav-item).",
+      "acceptanceCriteria": [
+        "_sass/_utilities.scss contains a :focus-visible rule with outline:2px solid #1a1a1a; outline-offset:2px or equivalent visible focus indicator",
+        "Tab key produces a visible focus ring on all <a> and <button> elements (verified via DevTools Element panel + Tab key navigation)",
+        "Focus ring does not cause layout shift (verified via DevTools Layout Shift indicator)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P2-009",
+      "phase": 2,
+      "priority": 12,
+      "title": "Phase 2 verification: Lighthouse + 6-item smoke checklist",
+      "description": "Run Lighthouse Desktop and the R7 6-item smoke checklist on local jekyll-serve.",
+      "acceptanceCriteria": [
+        ".omc/lighthouse/ directory created via mkdir -p",
+        "Lighthouse Desktop run yields Best Practices >= 90 and Accessibility >= 90; JSON archived to .omc/lighthouse/phase2.json",
+        "R7 smoke item (1): Vision section subgoals 0-3 open within ~300ms with no clipping/jump/horizontal scroll",
+        "R7 smoke item (2): Vision section subgoals 0-3 close smoothly with no flash of full content",
+        "R7 smoke item (3): Subgoal with >1500px content shows full content (Bug C verification)",
+        "R7 smoke item (4): Section switch 1->2->3->4->1 lands the vertical divider correctly without overshoot",
+        "R7 smoke item (5): Slow 3G reload settles .horizontal-line width with no shift >1px after fonts.load resolves",
+        "R7 smoke item (6): Tab through nav buttons shows visible focus ring with no layout shift"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P3-001",
+      "phase": 3,
+      "priority": 13,
+      "title": "Update _config.yml url: to CNAME",
+      "description": "Change url field from https://memorialStar.github.io to https://www.youngminjung.com. MUST run before head metadata changes.",
+      "acceptanceCriteria": [
+        "_config.yml url field equals \"https://www.youngminjung.com\"",
+        "bundle exec jekyll build succeeds",
+        "_site output files reference the new host in absolute_url-derived URLs"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P3-002",
+      "phase": 3,
+      "priority": 14,
+      "title": "Add full <head> metadata block",
+      "description": "Insert <meta description>, OG tags (title/description/url/image=me.jpg/type=profile/locale=en_US/locale:alternate=ko_KR), Twitter card (summary_large_image), JSON-LD Person (name, url, inLanguage:en, affiliation=KAIST, sameAs=[LinkedIn, X]), <link rel=canonical> into _layouts/default.html.",
+      "acceptanceCriteria": [
+        "_layouts/default.html <head> contains <meta name=\"description\" content=\"{{ site.description }}\">",
+        "_layouts/default.html <head> contains <link rel=\"canonical\" href=\"{{ page.url | absolute_url }}\">",
+        "_layouts/default.html <head> contains OG block: og:type=profile, og:title, og:description, og:url, og:image (absolute_url for /assets/img/me.jpg), og:locale=en_US, og:locale:alternate=ko_KR",
+        "_layouts/default.html <head> contains Twitter block: twitter:card=summary_large_image, twitter:title, twitter:description, twitter:image",
+        "_layouts/default.html <head> contains JSON-LD <script type=\"application/ld+json\"> with @type:Person, name, url, inLanguage:en, affiliation { @type:EducationalOrganization, name:KAIST }, sameAs:[LinkedIn URL, X URL]",
+        "bundle exec jekyll build succeeds; rendered _site/index.html contains all of the above tags with no Liquid errors"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P3-003",
+      "phase": 3,
+      "priority": 15,
+      "title": "Add jekyll-sitemap plugin",
+      "description": "Add jekyll-sitemap to Gemfile :jekyll_plugins group and _config.yml plugins list. Run bundle install. Verify sitemap.xml generates.",
+      "acceptanceCriteria": [
+        "Gemfile :jekyll_plugins block includes gem \"jekyll-sitemap\"",
+        "_config.yml plugins list includes - jekyll-sitemap",
+        "bundle install completes without errors and updates Gemfile.lock",
+        "bundle exec jekyll build produces _site/sitemap.xml with valid XML structure",
+        "_site/assets/css/style.css is still produced (Sass/sitemap interaction safe)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P3-004",
+      "phase": 3,
+      "priority": 16,
+      "title": "Add robots.txt",
+      "description": "Create robots.txt at repo root with Allow: / and Sitemap link.",
+      "acceptanceCriteria": [
+        "robots.txt exists at repo root",
+        "robots.txt contains User-agent: * and Allow: / and Sitemap: https://www.youngminjung.com/sitemap.xml",
+        "bundle exec jekyll build copies robots.txt to _site/robots.txt"
+      ],
+      "passes": true
+    },
+    {
+      "id": "US-P3-005",
+      "phase": 3,
+      "priority": 17,
+      "title": "Create docs/AUTHORING.md cheatsheet",
+      "description": "Public, GitHub-rendered authoring cheatsheet covering project/publication/news entry, image rule, &ast; escape, new-section warning.",
+      "acceptanceCriteria": [
+        "docs/AUTHORING.md exists in repo",
+        "AUTHORING.md has section: Add a project entry (with sample YAML block citing _data/projects.yml first entry)",
+        "AUTHORING.md has section: Add a publication (with sample YAML, &ast; escape note for asterisks in author names)",
+        "AUTHORING.md has section: Add a news item (with multi-line content: | YAML block scalar example)",
+        "AUTHORING.md has section: Image conversion rule (<=1600px width, prefer .webp, place in assets/img/projects/)",
+        "AUTHORING.md has section: Adding a new top-level section (advanced) noting main.js sectionData[] + default.html nav-container + _data/*.yml requirement",
+        "AUTHORING.md renders cleanly on github.com (no broken markdown syntax)"
+      ],
+      "passes": true
+    }
+  ]
+}
