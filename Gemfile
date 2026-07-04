@@ -8,7 +8,6 @@ gem "jekyll", "~> 4.4.1"
 
 group :jekyll_plugins do
   gem "jekyll-feed"
-  gem "jekyll-sitemap"
 end
 
 platforms :mingw, :x64_mingw, :mswin, :jruby do
@@ -20,8 +19,3 @@ gem "wdm", "~> 0.1", :platforms => [:mingw, :x64_mingw, :mswin]
 gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 gem "webrick", "~> 1.8"
-
-# Ruby 4.0 removed logger from the default stdlib; Jekyll 4.4.1 still expects it.
-gem "logger"
-gem "csv"
-gem "base64"
