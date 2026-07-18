@@ -81,8 +81,6 @@ const sectionData = [
                     ${siteInfo.departments.map(department => `<div class="info-section-4"> ${department}</div>`).join('')}
                 </div>
                 <div class="info-section-5">I live at <span id="current-time"></span> in ${siteInfo.location}.</div>
-                <div class="memo">Currently, I am fulfilling my mandatory military service in Korea.</div>
-                <div class="memo">I may not be able to reply in real time, but still I am always happy to receive your messages!</div>
                 <div class="memo"><br>I am in the process of applying to a Ph.D. program and look forward to the possibility of meeting you soon!</div>
             </div>
             <p>${parseAllText(sectionsData.main.content)}</p>
