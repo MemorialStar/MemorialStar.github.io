@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nacre — 자개 광학 시뮬레이션</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: #0b0908;
+    color: #e8e2d8;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+      "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+
+  /* ---- 히어로: 전체 배경이 자개 셰이더 ---- */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #bg { position: absolute; inset: 0; }
+  .hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    text-shadow: 0 2px 24px rgba(0,0,0,.55);
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 8vw, 5.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-shadow: none;
+  }
+  .hero p { margin-top: 1rem; opacity: .82; font-size: clamp(1rem, 2.2vw, 1.2rem); }
+  .hero .hint { margin-top: 2.2rem; font-size: .85rem; opacity: .5; }
+
+  /* ---- 본문 ---- */
+  main { max-width: 880px; margin: 0 auto; padding: 5rem 1.5rem; }
+  section + section { margin-top: 5rem; }
+  h2 { font-size: 1.6rem; margin-bottom: 1.4rem; letter-spacing: -0.01em; }
+  h2 small { display: block; font-size: .85rem; font-weight: 400; opacity: .5; margin-top: .2rem; }
+  p.desc { opacity: .78; margin-bottom: 1.6rem; }
+
+  .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+  .principles article {
+    background: #141110;
+    border: 1px solid #262019;
+    border-radius: 14px;
+    padding: 1.2rem 1.3rem;
+  }
+  .principles b { display: block; margin-bottom: .45rem; font-size: 1.02rem; }
+  .principles span { font-size: .88rem; opacity: .72; }
+  .principles code { font-size: .8rem; color: #b9d8c9; }
+
+  /* 자개 패널(하이라이트 박스) */
+  .panel {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    padding: 2.2rem 2rem;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .panel > .inner { position: relative; z-index: 1; text-shadow: 0 1px 14px rgba(0,0,0,.6); }
+  .panel h3 { font-size: 1.3rem; margin-bottom: .5rem; }
+  .panel p { opacity: .85; font-size: .95rem; max-width: 34rem; }
+
+  /* 텍스트 하이라이트 — Nacre.text()가 그라디언트를 실시간 갱신 */
+  .nacre-text { font-weight: 800; }
+
+  /* 컨트롤 */
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.1rem 2rem; }
+  .controls label { display: block; font-size: .85rem; opacity: .8; }
+  .controls output { float: right; font-variant-numeric: tabular-nums; color: #cfe7da; }
+  .controls input[type=range] { width: 100%; accent-color: #7fc7a8; margin-top: .35rem; }
+
+  pre {
+    background: #12100e;
+    border: 1px solid #262019;
+    border-radius: 12px;
+    padding: 1.1rem 1.3rem;
+    overflow-x: auto;
+    font-size: .84rem;
+    line-height: 1.55;
+    color: #d6cfc2;
+  }
+  pre .c { color: #6f6a5e; }
+  footer { text-align: center; padding: 3rem 1rem 4rem; opacity: .4; font-size: .85rem; }
+
+  /* WebGL 미지원 폴백 */
+  .nacre-fallback {
+    background: linear-gradient(120deg, #10233c, #1d4a3f 30%, #6c3f63 55%, #274a63 80%, #10233c);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div id="bg"></div>
+  <div class="hero">
+    <h1 class="nacre-text">나전칠기의 빛</h1>
+    <p>포인터를 움직여 보세요 — 광원의 각도가 바뀌며<br>실제 자개처럼 간섭색이 흐릅니다.</p>
+    <p class="hint">▼ 아래에 원리와 사용법</p>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>구현된 광학 원리 <small>장식이 아니라 계산입니다 — 픽셀마다 스펙트럼을 적분합니다</small></h2>
+    <div class="principles">
+      <article>
+        <b>① 다층 박막 간섭</b>
+        <span>아라고나이트 판(n≈1.63, ~470nm)과 유기층(n≈1.43)이 쌓인 구조. 광로차
+        <code>OPD = 2(n₁d₁cosθ₁ + n₂d₂cosθ₂)</code>를 계산해 파장별 보강/상쇄를 구합니다.</span>
+      </article>
+      <article>
+        <b>② 브래그 스택 반사</b>
+        <span>N층 반사파의 합 <code>sin²(Nφ/2)/(N²sin²(φ/2))</code> — 층수가 많을수록
+        피크가 날카로워져 채도가 올라갑니다.</span>
+      </article>
+      <article>
+        <b>③ 스펙트럼 → 색</b>
+        <span>400–700nm를 샘플링해 CIE 1931 등색함수로 적분 → XYZ → sRGB.
+        팔레트가 아니라 물리에서 색이 나옵니다.</span>
+      </article>
+      <article>
+        <b>④ 각도 의존 색변화</b>
+        <span>기울이면 cosθ가 커져 OPD가 줄고 색이 단파장(파랑) 쪽으로 이동 —
+        포인터/기기 기울임이 광원각을 제어합니다.</span>
+      </article>
+      <article>
+        <b>⑤ 판상 구조와 결</b>
+        <span>보로노이 셀 = 자개 판 도메인, 저주파 노이즈 = 성장 결.
+        판마다 두께·기울기가 달라 조각조각 다른 색을 냅니다.</span>
+      </article>
+      <article>
+        <b>⑥ 테라스 프린지와 글린트</b>
+        <span>판 경계의 두께 계단이 만드는 간섭 프린지, 일부 판만 정반사각에서
+        번쩍이는 글린트 — 자개 특유의 반짝임입니다.</span>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>강조 패널 <small>Nacre.attach() — 카드·버튼·섹션 배경으로</small></h2>
+    <div class="panel" id="panel1" data-nacre data-scale="9" data-thickness="430" data-layers="7">
+      <div class="inner">
+        <h3>프로젝트 하이라이트</h3>
+        <p>포트폴리오에서 강조하고 싶은 카드에 이렇게 배경으로 깔 수 있습니다.
+        패널마다 seed·두께를 다르게 주면 서로 다른 자개 조각처럼 보입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>염색 시트 스타일 <small>style: 'sheet' — 밝게 염색된 자개 (sample.png 재현)</small></h2>
+    <p class="desc">어두운 옻칠 상감 대신 밝게 염색된 자개의 결입니다.
+    결의 방향장이 공간에서 완만하게 휘고(성장선의 곡률), 층수를 낮춘 파스텔 간섭색과
+    흰 진주광택이 얹힙니다. 아래 슬라이더로 실시간 조정해 보세요.</p>
+    <div class="panel" style="min-height:320px" id="panel-sheet">
+      <div class="inner">
+        <h3 style="color:#0d2246; text-shadow:none;">블루 시트 패널</h3>
+      </div>
+    </div>
+    <div class="controls" style="margin-top:1.6rem">
+      <label>판 두께 d (nm) <output id="so-thick">470</output>
+        <input type="range" id="sc-thick" min="300" max="700" step="5" value="470"></label>
+      <label>간섭 층수 N <output id="so-layers">3</output>
+        <input type="range" id="sc-layers" min="2" max="8" step="1" value="3"></label>
+      <label>결 밀도 <output id="so-streak">1.0</output>
+        <input type="range" id="sc-streak" min="0.4" max="2.5" step="0.05" value="1"></label>
+      <label>결 방향 (°) <output id="so-flow">-40</output>
+        <input type="range" id="sc-flow" min="-90" max="90" step="1" value="-40"></label>
+      <label>결 명암 대비 <output id="so-contrast">1.0</output>
+        <input type="range" id="sc-contrast" min="0" max="1.6" step="0.05" value="1"></label>
+      <label>흰 광 세기 <output id="so-sheen">1.0</output>
+        <input type="range" id="sc-sheen" min="0" max="2" step="0.05" value="1"></label>
+      <label>구조색 세기 <output id="so-irid">1.0</output>
+        <input type="range" id="sc-irid" min="0" max="2.5" step="0.05" value="1"></label>
+      <label>염색 색 tint
+        <input type="color" id="sc-tint" value="#446fba"
+          style="width:100%; height:2.1rem; margin-top:.35rem; border:none; background:none; padding:0;"></label>
+    </div>
+    <p class="desc" style="font-size:1.35rem; margin-top:1.6rem;">
+      텍스트에도: <span id="sheet-text" style="font-weight:800;">파란 자개 시트의 결을 그대로</span>
+    </p>
+  </section>
+
+  <section>
+    <h2>텍스트 하이라이트 <small>Nacre.text() — WebGL 없이 같은 물리식으로 그라디언트 생성</small></h2>
+    <p class="desc" style="font-size:1.35rem;">
+      본문 속에서 <span class="nacre-text">이렇게 중요한 문구</span>만 자개처럼 빛나게 하거나,<br>
+      <span class="nacre-text" data-nacre-text data-thickness="380">두께를 바꿔 다른 색조</span>를 낼 수도 있습니다.
+    </p>
+  </section>
+
+  <section>
+    <h2>파라미터 <small>배경 인스턴스에 실시간 반영 — 마음에 드는 값을 포폴에 쓰세요</small></h2>
+    <div class="controls">
+      <label>판 두께 d (nm) <output id="o-thick">470</output>
+        <input type="range" id="c-thick" min="300" max="700" step="5" value="470"></label>
+      <label>간섭 층수 N <output id="o-layers">6</output>
+        <input type="range" id="c-layers" min="2" max="12" step="1" value="6"></label>
+      <label>판 밀도 <output id="o-scale">6.5</output>
+        <input type="range" id="c-scale" min="2" max="20" step="0.5" value="6.5"></label>
+      <label>구조색 세기 <output id="o-irid">1.0</output>
+        <input type="range" id="c-irid" min="0" max="2.5" step="0.05" value="1"></label>
+    </div>
+  </section>
+
+  <section>
+    <h2>사용법</h2>
+<pre><code>&lt;script src="nacre/nacre.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  <span class="c">// 배경 / 강조 패널 (WebGL) — 기본은 옻칠(lacquer) 스타일</span>
+  const bg = Nacre.attach('#hero', { scale: 6.5, thickness: 470, layers: 6 });
+  bg.setOptions({ thickness: 520 });   <span class="c">// 실시간 변경</span>
+
+  <span class="c">// 염색 시트 스타일 — tint(염색색)·flow(결 방향)·streak(결 밀도) 등 조정 가능</span>
+  Nacre.attach('#card', { style: 'sheet', tint: '#4a86d8', flow: -30, streak: 1.2 });
+
+  <span class="c">// 텍스트 하이라이트 (WebGL 불필요) — tint를 주면 시트 톤</span>
+  Nacre.text('.nacre-text', { thickness: 470 });
+  Nacre.text('#sheet-text', { tint: '#4a86d8' });
+
+  <span class="c">// 간섭색 하나만 필요할 때 (링크·보더 색 등)</span>
+  el.style.borderColor = Nacre.color(470, 0.8, 6);
+
+  <span class="c">// 또는 HTML만으로: &lt;div data-nacre data-thickness="430"&gt; + Nacre.auto()</span>
+&lt;/script&gt;</code></pre>
+  </section>
+</main>
+
+<footer>진주층 다층 박막 간섭 · CIE 1931 스펙트럼 적분 · 브래그 스택 모델</footer>
+
+<script src="nacre.js"></script>
+<script>
+  // 히어로 배경
+  var bg = Nacre.attach(document.getElementById('bg'), {
+    scale: 6.5, thickness: 470, layers: 6, seed: 4.2
+  });
+  // data-속성 요소(패널, 두 번째 텍스트) 자동 초기화
+  Nacre.auto();
+  // 첫 번째 텍스트 하이라이트
+  Nacre.text(document.querySelectorAll('.nacre-text:not([data-nacre-text])'));
+  // 시트 스타일 패널 + 시트 톤 텍스트
+  var sheet = Nacre.attach(document.getElementById('panel-sheet'), { style: 'sheet' });
+  Nacre.text(document.getElementById('sheet-text'), { tint: '#4a86d8' });
+
+  // 컨트롤 → 인스턴스
+  function bind(id, out, key, inst, fmt) {
+    var input = document.getElementById(id), o = document.getElementById(out);
+    input.addEventListener('input', function () {
+      var v = parseFloat(input.value);
+      o.textContent = fmt ? fmt(v) : v;
+      if (inst) {
+        var patch = {};
+        patch[key] = v;
+        inst.setOptions(patch);
+      }
+    });
+  }
+  // 배경(옻칠)
+  bind('c-thick', 'o-thick', 'thickness', bg);
+  bind('c-layers', 'o-layers', 'layers', bg);
+  bind('c-scale', 'o-scale', 'scale', bg);
+  bind('c-irid', 'o-irid', 'iridescence', bg, function (v) { return v.toFixed(2); });
+  // 시트 패널
+  var f2 = function (v) { return v.toFixed(2); };
+  bind('sc-thick', 'so-thick', 'thickness', sheet);
+  bind('sc-layers', 'so-layers', 'layers', sheet);
+  bind('sc-streak', 'so-streak', 'streak', sheet, f2);
+  bind('sc-flow', 'so-flow', 'flow', sheet);
+  bind('sc-contrast', 'so-contrast', 'contrast', sheet, f2);
+  bind('sc-sheen', 'so-sheen', 'sheen', sheet, f2);
+  bind('sc-irid', 'so-irid', 'iridescence', sheet, f2);
+  document.getElementById('sc-tint').addEventListener('input', function (e) {
+    if (sheet) sheet.setOptions({ tint: e.target.value });
+  });
+</script>
+</body>
+</html>
