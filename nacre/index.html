@@ -148,13 +148,30 @@
   </section>
 
   <section>
-    <h2>강조 패널 <small>Nacre.attach() — 카드·버튼·섹션 배경으로</small></h2>
-    <div class="panel" id="panel1" data-nacre data-scale="9" data-thickness="430" data-layers="7">
+    <h2>옻칠 상감 스타일 <small>style: 'lacquer' (기본) — 검은 옻칠 위 자개 조각</small></h2>
+    <p class="desc">히어로 배경과 같은 스타일입니다. 아래 슬라이더는 이 패널과 히어로 배경에
+    동시에 적용됩니다. 판 두께가 색조를 결정하고(기본 385nm = 파랑), <b>두께 균일도</b>를 낮추면
+    실제 자개처럼 판 두께가 고르게 정렬돼 일관되고 강한 파랑을 냅니다. 높이면 무지개처럼 색이 흩어집니다.</p>
+    <div class="panel" style="min-height:320px" id="panel-lacquer">
       <div class="inner">
         <h3>프로젝트 하이라이트</h3>
         <p>포트폴리오에서 강조하고 싶은 카드에 이렇게 배경으로 깔 수 있습니다.
         패널마다 seed·두께를 다르게 주면 서로 다른 자개 조각처럼 보입니다.</p>
       </div>
+    </div>
+    <div class="controls" style="margin-top:1.6rem">
+      <label>판 두께 d (nm) <output id="lo-thick">380</output>
+        <input type="range" id="lc-thick" min="300" max="700" step="5" value="380"></label>
+      <label>간섭 층수 N <output id="lo-layers">8</output>
+        <input type="range" id="lc-layers" min="2" max="12" step="1" value="8"></label>
+      <label>판 밀도 <output id="lo-scale">11.0</output>
+        <input type="range" id="lc-scale" min="2" max="20" step="0.5" value="11"></label>
+      <label>두께 균일도 (↓ 일관된 파랑) <output id="lo-var">0.25</output>
+        <input type="range" id="lc-var" min="0" max="1.5" step="0.05" value="0.25"></label>
+      <label>구조색 세기 <output id="lo-irid">2.50</output>
+        <input type="range" id="lc-irid" min="0" max="4" step="0.05" value="2.5"></label>
+      <button id="lc-export" style="align-self:end; padding:.55rem 1rem; background:#1c1814; color:#cfe7da;
+        border:1px solid #33291f; border-radius:8px; cursor:pointer; font-size:.85rem;">현재 세팅 JSON 복사</button>
     </div>
   </section>
 
@@ -169,23 +186,27 @@
       </div>
     </div>
     <div class="controls" style="margin-top:1.6rem">
-      <label>판 두께 d (nm) <output id="so-thick">470</output>
-        <input type="range" id="sc-thick" min="300" max="700" step="5" value="470"></label>
-      <label>간섭 층수 N <output id="so-layers">3</output>
-        <input type="range" id="sc-layers" min="2" max="8" step="1" value="3"></label>
-      <label>결 밀도 <output id="so-streak">1.0</output>
-        <input type="range" id="sc-streak" min="0.4" max="2.5" step="0.05" value="1"></label>
-      <label>결 방향 (°) <output id="so-flow">-40</output>
-        <input type="range" id="sc-flow" min="-90" max="90" step="1" value="-40"></label>
-      <label>결 명암 대비 <output id="so-contrast">1.0</output>
-        <input type="range" id="sc-contrast" min="0" max="1.6" step="0.05" value="1"></label>
-      <label>흰 광 세기 <output id="so-sheen">1.0</output>
-        <input type="range" id="sc-sheen" min="0" max="2" step="0.05" value="1"></label>
-      <label>구조색 세기 <output id="so-irid">1.0</output>
-        <input type="range" id="sc-irid" min="0" max="2.5" step="0.05" value="1"></label>
+      <label>판 두께 d (nm) <output id="so-thick">395</output>
+        <input type="range" id="sc-thick" min="300" max="700" step="5" value="395"></label>
+      <label>간섭 층수 N <output id="so-layers">8</output>
+        <input type="range" id="sc-layers" min="2" max="12" step="1" value="8"></label>
+      <label>조각 평균 크기 <output id="so-piece">2.10</output>
+        <input type="range" id="sc-piece" min="0.1" max="3" step="0.05" value="2.1"></label>
+      <label>결 밀도 <output id="so-streak">1.20</output>
+        <input type="range" id="sc-streak" min="0.4" max="2.5" step="0.05" value="1.2"></label>
+      <label>결 방향 (°) <output id="so-flow">12</output>
+        <input type="range" id="sc-flow" min="-90" max="90" step="1" value="12"></label>
+      <label>결 명암 대비 <output id="so-contrast">1.20</output>
+        <input type="range" id="sc-contrast" min="0" max="1.6" step="0.05" value="1.2"></label>
+      <label>흰 광 세기 <output id="so-sheen">1.10</output>
+        <input type="range" id="sc-sheen" min="0" max="2" step="0.05" value="1.1"></label>
+      <label>구조색 세기 <output id="so-irid">2.50</output>
+        <input type="range" id="sc-irid" min="0" max="4" step="0.05" value="2.5"></label>
       <label>염색 색 tint
-        <input type="color" id="sc-tint" value="#446fba"
+        <input type="color" id="sc-tint" value="#d4e3fe"
           style="width:100%; height:2.1rem; margin-top:.35rem; border:none; background:none; padding:0;"></label>
+      <button id="sc-export" style="align-self:end; padding:.55rem 1rem; background:#1c1814; color:#cfe7da;
+        border:1px solid #33291f; border-radius:8px; cursor:pointer; font-size:.85rem;">현재 세팅 JSON 복사</button>
     </div>
     <p class="desc" style="font-size:1.35rem; margin-top:1.6rem;">
       텍스트에도: <span id="sheet-text" style="font-weight:800;">파란 자개 시트의 결을 그대로</span>
@@ -201,33 +222,19 @@
   </section>
 
   <section>
-    <h2>파라미터 <small>배경 인스턴스에 실시간 반영 — 마음에 드는 값을 포폴에 쓰세요</small></h2>
-    <div class="controls">
-      <label>판 두께 d (nm) <output id="o-thick">470</output>
-        <input type="range" id="c-thick" min="300" max="700" step="5" value="470"></label>
-      <label>간섭 층수 N <output id="o-layers">6</output>
-        <input type="range" id="c-layers" min="2" max="12" step="1" value="6"></label>
-      <label>판 밀도 <output id="o-scale">6.5</output>
-        <input type="range" id="c-scale" min="2" max="20" step="0.5" value="6.5"></label>
-      <label>구조색 세기 <output id="o-irid">1.0</output>
-        <input type="range" id="c-irid" min="0" max="2.5" step="0.05" value="1"></label>
-    </div>
-  </section>
-
-  <section>
     <h2>사용법</h2>
 <pre><code>&lt;script src="nacre/nacre.js"&gt;&lt;/script&gt;
 &lt;script&gt;
-  <span class="c">// 배경 / 강조 패널 (WebGL) — 기본은 옻칠(lacquer) 스타일</span>
-  const bg = Nacre.attach('#hero', { scale: 6.5, thickness: 470, layers: 6 });
+  <span class="c">// 배경 / 강조 패널 (WebGL) — 기본은 옻칠(lacquer) 스타일 (380nm·균일도 낮음 = 파랑)</span>
+  const bg = Nacre.attach('#hero', { variance: 0.25 });
   bg.setOptions({ thickness: 520 });   <span class="c">// 실시간 변경</span>
 
-  <span class="c">// 염색 시트 스타일 — tint(염색색)·flow(결 방향)·streak(결 밀도) 등 조정 가능</span>
-  Nacre.attach('#card', { style: 'sheet', tint: '#4a86d8', flow: -30, streak: 1.2 });
+  <span class="c">// 염색 시트 스타일 — tint(염색색)·flow(결 방향)·streak(결 밀도)·piece(조각 크기) 등</span>
+  Nacre.attach('#card', { style: 'sheet', tint: '#d4e3fe', piece: 1.7 });
 
   <span class="c">// 텍스트 하이라이트 (WebGL 불필요) — tint를 주면 시트 톤</span>
   Nacre.text('.nacre-text', { thickness: 470 });
-  Nacre.text('#sheet-text', { tint: '#4a86d8' });
+  Nacre.text('#sheet-text', { tint: '#d4e3fe' });
 
   <span class="c">// 간섭색 하나만 필요할 때 (링크·보더 색 등)</span>
   el.style.borderColor = Nacre.color(470, 0.8, 6);
@@ -241,17 +248,24 @@
 
 <script src="nacre.js"></script>
 <script>
-  // 히어로 배경
-  var bg = Nacre.attach(document.getElementById('bg'), {
-    scale: 6.5, thickness: 470, layers: 6, seed: 4.2
-  });
-  // data-속성 요소(패널, 두 번째 텍스트) 자동 초기화
+  // 히어로 배경 (옻칠 프리셋 기본값 그대로)
+  var bg = Nacre.attach(document.getElementById('bg'), { seed: 4.2 });
+  // data-속성 요소(두 번째 텍스트) 자동 초기화
   Nacre.auto();
   // 첫 번째 텍스트 하이라이트
   Nacre.text(document.querySelectorAll('.nacre-text:not([data-nacre-text])'));
-  // 시트 스타일 패널 + 시트 톤 텍스트
+  // 옻칠 패널 · 시트 패널 · 시트 톤 텍스트
+  var lac = Nacre.attach(document.getElementById('panel-lacquer'), { seed: 2.6 });
   var sheet = Nacre.attach(document.getElementById('panel-sheet'), { style: 'sheet' });
-  Nacre.text(document.getElementById('sheet-text'), { tint: '#4a86d8' });
+  Nacre.text(document.getElementById('sheet-text'), { tint: '#d4e3fe' });
+
+  // 옻칠 슬라이더는 패널과 히어로 배경에 동시 적용
+  var lacBoth = {
+    setOptions: function (p) {
+      if (lac) lac.setOptions(p);
+      if (bg) bg.setOptions(p);
+    }
+  };
 
   // 컨트롤 → 인스턴스
   function bind(id, out, key, inst, fmt) {
@@ -266,15 +280,17 @@
       }
     });
   }
-  // 배경(옻칠)
-  bind('c-thick', 'o-thick', 'thickness', bg);
-  bind('c-layers', 'o-layers', 'layers', bg);
-  bind('c-scale', 'o-scale', 'scale', bg);
-  bind('c-irid', 'o-irid', 'iridescence', bg, function (v) { return v.toFixed(2); });
-  // 시트 패널
   var f2 = function (v) { return v.toFixed(2); };
+  // 옻칠 상감
+  bind('lc-thick', 'lo-thick', 'thickness', lacBoth);
+  bind('lc-layers', 'lo-layers', 'layers', lacBoth);
+  bind('lc-scale', 'lo-scale', 'scale', lacBoth);
+  bind('lc-var', 'lo-var', 'variance', lacBoth, f2);
+  bind('lc-irid', 'lo-irid', 'iridescence', lacBoth, f2);
+  // 염색 시트
   bind('sc-thick', 'so-thick', 'thickness', sheet);
   bind('sc-layers', 'so-layers', 'layers', sheet);
+  bind('sc-piece', 'so-piece', 'piece', sheet, f2);
   bind('sc-streak', 'so-streak', 'streak', sheet, f2);
   bind('sc-flow', 'so-flow', 'flow', sheet);
   bind('sc-contrast', 'so-contrast', 'contrast', sheet, f2);
@@ -283,6 +299,29 @@
   document.getElementById('sc-tint').addEventListener('input', function (e) {
     if (sheet) sheet.setOptions({ tint: e.target.value });
   });
+
+  // 현재 세팅을 JSON으로 클립보드에 복사
+  function exporter(btnId, getInst, keys) {
+    document.getElementById(btnId).addEventListener('click', function () {
+      var btn = this, inst = getInst(), out = {};
+      keys.forEach(function (k) { if (inst) out[k] = inst.options[k]; });
+      var json = JSON.stringify(out);
+      function done() {
+        btn.textContent = '복사됨!';
+        setTimeout(function () { btn.textContent = '현재 세팅 JSON 복사'; }, 1500);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(json).then(done, function () { window.prompt('복사:', json); });
+      } else {
+        window.prompt('복사:', json);
+      }
+    });
+  }
+  exporter('lc-export', function () { return lac; },
+    ['thickness', 'layers', 'scale', 'variance', 'iridescence', 'exposure', 'tint']);
+  exporter('sc-export', function () { return sheet; },
+    ['thickness', 'layers', 'piece', 'streak', 'flow', 'flowVar',
+     'contrast', 'sheen', 'iridescence', 'scale', 'exposure', 'tint']);
 </script>
 </body>
 </html>

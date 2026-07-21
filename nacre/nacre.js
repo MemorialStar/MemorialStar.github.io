@@ -13,9 +13,11 @@
  * 스타일 프리셋:
  *   'lacquer' — 검은 옻칠 위 자개 상감. 보로노이 판 도메인, 어두운 이음매,
  *               광원 주변에서만 빛나는 조각들.
- *   'sheet'   — 염색 자개 시트(샘플: 블루). 밝은 바탕 위로 연속적으로 흐르는
- *               이방성 결, 층수를 낮춰 파스텔 간섭색.
- *               조절값: tint(염색색)·flow(결 방향)·flowVar(굽이)·streak(결 밀도)
+ *               조절값: thickness(색조)·variance(두께 균일도, 낮을수록 일관된 파랑)
+ *                      ·layers·scale·iridescence·tint 등.
+ *   'sheet'   — 염색 자개 시트(샘플: 블루). 큰 판상조각(보로노이)마다 제각기
+ *               다른 방향의 결이 흐르고, 층수를 낮춰 파스텔 간섭색.
+ *               조절값: tint(염색색)·flow(결 방향)·flowVar(조각별 방향 편차)·streak(결 밀도)
  *                      ·contrast(결 명암)·sheen(흰 광)·thickness·layers 등.
  *
  * API:
@@ -139,10 +141,12 @@
     'uniform float uExposure;',
     'uniform vec3  uTint;',
     'uniform float uFlow;',      // 결 기준 방향(라디안) — sheet 전용
-    'uniform float uFlowVar;',   // 결 방향의 공간적 변화량
+    'uniform float uFlowVar;',   // 조각별 결 방향 편차
     'uniform float uStreak;',    // 결 밀도
     'uniform float uSheen;',     // 흰 광 세기
     'uniform float uContrast;',  // 결 명암 대비
+    'uniform float uPiece;',     // 조각 평균 크기 배율 (1 = 기본, 클수록 큼)
+    'uniform float uVar;',       // 판 두께·기울기 변동량 (lacquer) — 낮을수록 색이 균일
     'const float N1 = 1.63;',      // 아라고나이트
     'const float N2 = 1.43;',      // 콘키올린
     'const float ORGANIC = 0.18;',
@@ -243,11 +247,13 @@
     '  float h  = fbm(q*0.35);',
     '  vec2 grad = vec2(fbm(q*0.35+vec2(e,0.0))-h, fbm(q*0.35+vec2(0.0,e))-h)/e;',
     '',
-    '  vec2 tilt = (hash22(id+3.1) - 0.5)*0.38;',   // 판마다 다른 미세 기울기
+    /* 판마다 다른 미세 기울기 — uVar가 낮으면 조각들이 비슷한 각도로 정렬돼
+       같은 간섭색을 반사한다(실물 자개의 판이 표면에 나란히 놓인 상태) */
+    '  vec2 tilt = (hash22(id+3.1) - 0.5)*0.38*mix(0.35, 1.0, uVar);',
     '  vec3 Nrm = normalize(vec3(-grad*0.4 - tilt, 1.0));',
     '',
     /* 광원을 비스듬히: L·V가 벌어져야 특정 기울기의 판만 정반사를 잡는다 */
-    '  vec3 V = normalize(vec3(-p*0.35, 1.0));',
+    '  vec3 V = normalize(vec3(-p*0.22, 1.0));',
     '  vec3 L = normalize(vec3(uPointer*1.4, 0.75));',
     '  vec3 H = normalize(V+L);',
     '',
@@ -255,22 +261,32 @@
     '  float cosNV = clamp(dot(Nrm,V), 0.0, 1.0);',
     '  float align = clamp(dot(reflect(-L,Nrm), V), 0.0, 1.0);',
     '',
-    /* 두께장: 성장 줄무늬 + 판별 편차 + 판 내부 테라스(두께 계단 → 프린지) */
+    /* 두께장: 성장 줄무늬 + 판별 편차 + 판 내부 테라스(두께 계단 → 프린지).
+       실물 자개는 판 두께가 매우 균일해 단일 간섭색을 낸다 → uVar로 변동폭 조절.
+       uVar↓ = 두께 균일 = 강하고 일관된 단색, uVar↑ = 무지개처럼 색 흩어짐 */
     '  float d = uThick * (1.0',
-    '      + 0.24*(fbm(q*0.22 + vec2(31.7))*2.0 - 1.0)',
-    '      + 0.09*(hash12(id)*2.0 - 1.0));',
-    '  d *= 1.0 + 0.02*sin(f1*13.0 + 4.0*vnoise(q*1.7) + hash12(id+9.1)*6.2831);',
+    '      + 0.24*(fbm(q*0.22 + vec2(31.7))*2.0 - 1.0)*uVar',
+    '      + 0.09*(hash12(id)*2.0 - 1.0)*uVar);',
+    '  d *= 1.0 + 0.02*sin(f1*13.0 + 4.0*vnoise(q*1.7) + hash12(id+9.1)*6.2831)*uVar;',
     '',
     /* 옻칠 바탕(선형 공간에서 진짜 어둡게) */
     '  vec3 col = uTint*(0.6 + 0.8*h);',
     '',
-    /* 확산광 아래 은은한 구조색 + 정반사 방향의 강한 무지개 */
-    '  vec3 iridA = iridescence(d, cosNV, uLayers);',
+    /* 확산 구조색은 "평탄한" 법선으로 계산 → 실물처럼 판이 표면에 나란히 놓여
+       화면 전체가 일관된 단색(파랑)을 낸다. uVar가 낮을수록 더 평탄=더 균일.
+       울퉁불퉁한 Nrm은 정반사 반짝임(iridS)에만 남긴다. */
+    '  vec3 Ndiff = normalize(vec3((-grad*0.4 - tilt)*mix(0.12, 1.0, uVar), 1.0));',
+    /* cosNVd를 파랑이 가장 진한 좁은 구간(0.84~0.92)에 묶는다 — 넓은 각도에서
+       청록이나 마젠타 고차 간섭색으로 넘어가는 것을 막아 일관된 파랑을 유지 */
+    '  float cosNVd = mix(0.84, 0.92, clamp(dot(Ndiff, V), 0.0, 1.0));',
+    '  vec3 iridA = iridescence(d, cosNVd, uLayers);',
     '  vec3 iridS = iridescence(d, cosNH, uLayers);',
     /* 광원에서 먼 곳은 옻칠의 어둠에 잠기도록 감쇠 (정반사각 + 광원 거리) */
     '  float spot = exp(-2.2*length(p - uPointer*0.45));',
     '  float lit = (0.15 + 0.85*pow(align, 2.0)) * mix(0.03, 1.0, spot);',
-    '  col += iridA * 0.04 * lit * uIrid;',
+    /* 확산 구조색: 자개 조각이 화면을 채우는 파랑 (스팟 밖에서도 또렷이 보이게) */
+    '  col += iridA * (0.55 + 0.7*spot) * uIrid;',
+    /* 정반사 방향의 강한 무지개 */
     '  col += iridS * (0.03 + 2.4*pow(align, 24.0)) * lit * uIrid;',
     '',
     /* 판 경계: 어두운 이음매 + 경계 두께가 달라 생기는 대비 프린지 */
@@ -295,31 +311,44 @@
     '}'
   ].join('\n');
 
-  // 스타일 2: 염색 자개 시트 — 밝은 바탕, 연속적으로 흐르는 이방성 결
+  // 스타일 2: 염색 자개 시트 — 판상조각(보로노이)마다 제각기 다른 방향의 결
   var FRAG_SHEET = [
-    /* 결 함수: 고정 방향으로 회전 후 가로축만 노이즈로 굽힌다(나뭇결 방식).
-       공간마다 다른 각도로 회전하면 전단 때문에 마블링이 되므로 금지. */
-    'float grain(vec2 q, vec2 sc){',
-    '  vec2 r = rot(q, uFlow);',
-    '  r.y += (fbm(q*0.13 + vec2(7.3, 2.9)) - 0.5)*uFlowVar*4.0;',   // 결의 굽이
-    '  r.x += (fbm(q*0.11 + vec2(41.0, 13.0)) - 0.5)*0.8;',
-    /* 2옥타브만 — 고옥타브 필라멘트가 대리석 무늬를 만든다 */
-    '  return 0.65*vnoise(r*sc) + 0.35*vnoise(r*sc*2.3 + vec2(9.7, 3.1));',
+    /* 결 함수: 조각별 방향(ang)으로 회전 후 가로축만 노이즈로 굽힌다(나뭇결 방식).
+       ph는 조각별 위상 오프셋 — 결이 조각 경계를 넘어 이어지지 않게 한다.
+       공간마다 연속적으로 회전하면 전단 때문에 마블링이 되므로 금지. */
+    'float grain(vec2 q, vec2 sc, float ang, float ph){',
+    '  vec2 r = rot(q, ang);',
+    '  r.y += (fbm(q*0.13 + vec2(7.3 + ph, 2.9)) - 0.5)*1.2;',   // 조각 안 결의 굽이
+    '  r.x += (fbm(q*0.11 + vec2(41.0, 13.0 + ph)) - 0.5)*0.8;',
+    /* 3옥타브 — 마지막 옥타브가 가는 평행 줄무늬(자글자글함)를 만든다.
+       방향이 조각 안에서 고정이라 마블링으로 뭉개지지 않는다. */
+    '  return 0.52*vnoise(r*sc + ph) + 0.30*vnoise(r*sc*2.3 + vec2(9.7 + ph, 3.1))',
+    '       + 0.18*vnoise(r*sc*5.1 + vec2(4.3, 8.9 + ph));',
     '}',
     '',
     'void main(){',
     '  vec2 p = (gl_FragCoord.xy - 0.5*uRes)/min(uRes.x, uRes.y);',
     '  vec2 q = p*uScale + vec2(uSeed*13.7, uSeed*7.9);',
     '',
+    /* 판상조각 도메인: 원래 자개처럼 보로노이 — 단, 조각을 크게 잡아 덜 자글자글하게 */
+    '  vec2 id; float f1; float f2;',
+    '  voronoi(q*0.55/uPiece, id, f1, f2);',
+    '  float edge = f2 - f1;',
+    '',
+    /* 조각마다 다른 결 방향·위상 (실물 상감처럼 결이 조각 경계에서 끊긴다) */
+    '  float ang = uFlow + (hash12(id + 2.2) - 0.5)*uFlowVar*2.0;',
+    '  float ph = hash12(id)*23.0;',
+    '',
     /* 이방성 결: 결 방향으로 길고 가로로 촘촘 */
     '  vec2 sc = vec2(0.22, 0.85)*uStreak;',
-    '  float streak = grain(q, sc);',
+    '  float streak = grain(q, sc, ang, ph);',
     '',
-    /* 결의 기울기 → 법선 (grain이 월드 좌표 함수라 바로 미분) */
+    /* 결의 기울기 → 법선 (조각 파라미터는 고정한 채 미분) */
     '  float e = 0.05;',
-    '  vec2 sg = vec2(grain(q + vec2(e, 0.0), sc) - streak,',
-    '                 grain(q + vec2(0.0, e), sc) - streak)/e;',
-    '  vec3 Nrm = normalize(vec3(-sg*0.30, 1.0));',
+    '  vec2 sg = vec2(grain(q + vec2(e, 0.0), sc, ang, ph) - streak,',
+    '                 grain(q + vec2(0.0, e), sc, ang, ph) - streak)/e;',
+    '  vec2 tiltP = (hash22(id + 3.3) - 0.5)*0.14;',   // 조각별 미세 기울기
+    '  vec3 Nrm = normalize(vec3(-sg*0.38 - tiltP, 1.0));',
     '',
     '  vec3 V = normalize(vec3(-p*0.3, 1.0));',
     '  vec3 L = normalize(vec3(uPointer*1.1, 0.9));',
@@ -333,8 +362,10 @@
     '  float d = uThick * (1.0 + 0.18*(streak*2.0 - 1.0)',
     '                          + 0.10*(fbm(q*0.2 + vec2(31.7))*2.0 - 1.0));',
     '',
-    /* 염색된 밝은 바탕: 결의 명암 (contrast로 진폭 조절) */
-    '  vec3 col = uTint * max(1.0 + (streak*2.0 - 1.0)*0.62*uContrast, 0.05);',
+    /* 염색된 밝은 바탕: 결의 명암 (contrast로 진폭 조절) + 조각별 톤·색 편차 */
+    '  float bright = 0.94 + 0.28*(hash12(id + 5.5) - 0.5);',
+    '  vec3 jit = 1.0 + 0.08*(hash22(id + 6.4).xyx - 0.5)*vec3(1.0, 0.6, 1.0);',
+    '  vec3 col = uTint * jit * bright * max(1.0 + (streak*2.0 - 1.0)*0.62*uContrast, 0.05);',
     '',
     /* 파스텔 간섭색: 층수가 적어 피크가 넓다 → 채도 낮은 분홍/라벤더 */
     /* 바탕색이 지배하고, 플래시는 마스크가 걸린 일부 영역에만 */
@@ -348,13 +379,14 @@
     '  col += vec3(1.0, 0.99, 0.97) * uSheen * (0.06*pow(align, 4.0)',
     '       + 0.50*pow(align, 24.0)*(0.5 + 0.5*streak));',
     '',
-    /* 자개 글린트: 판 도메인(보로노이) 일부만 정반사각에서 반짝 — 이음매 없이 */
-    '  vec2 vid; float vf1; float vf2;',
-    '  voronoi(q*1.7, vid, vf1, vf2);',
-    '  float spk = hash12(vid + 7.31);',
+    /* 자개 글린트: 일부 조각만 정반사각에서 반짝 */
+    '  float spk = hash12(id + 7.31);',
     '  float tw = 0.8 + 0.2*sin(uTime*(1.2 + 2.0*spk) + spk*40.0);',
     '  float glint = step(0.78, spk) * pow(align, 60.0) * tw;',
     '  col += (vec3(0.9) + iridS*0.8) * glint * uSheen;',
+    '',
+    /* 조각 이음매: 거의 안 보일 만큼 가는 선 — 조각 구분은 결 방향·톤 차이가 담당 */
+    '  col *= mix(0.92, 1.0, smoothstep(0.0, 0.012, edge));',
     '',
     '  col = 1.0 - exp(-col*uExposure);',   // 톤매핑
     '  col = pow(col, vec3(1.0/2.2));',     // 감마
@@ -366,17 +398,21 @@
 
   var PRESETS = {
     lacquer: {
-      tint: [0.012, 0.008, 0.006],  // 옻칠 흑색(선형)
-      layers: 6, thickness: 470, exposure: 1.35, scale: 7.0
+      tint: [0.008, 0.010, 0.017],  // 옻칠 흑색(선형) — 살짝 차가운 톤
+      layers: 8, thickness: 380, exposure: 1.35, scale: 11, variance: 0.25,
+      iridescence: 2.5
+      // 두께 380nm·층수 8 → 진한 파랑, variance 0.25 → 판 두께 균일해 일관된 강한 파랑
     },
     sheet: {
-      tint: [0.055, 0.16, 0.50],    // 염색 블루(선형) — sample.png 톤
-      layers: 3, thickness: 470, exposure: 1.7, scale: 4.5,
-      flow: -40,     // 결 기준 방향(도)
-      flowVar: 26,   // 결 방향의 공간적 변화량(도)
-      streak: 1.0,   // 결 밀도
-      sheen: 1.0,    // 흰 광 세기
-      contrast: 1.0  // 결 명암 대비
+      tint: [0.6661169687758508, 0.7742273142184416, 0.9913928435929399], // #d4e3fe
+      layers: 8, thickness: 395, exposure: 1.7, scale: 4.5,
+      iridescence: 2.5, // 구조색 세기
+      flow: 12,       // 결 기준 방향(도)
+      flowVar: 35,    // 조각별 결 방향 편차(도)
+      streak: 1.2,    // 결 밀도
+      sheen: 1.1,     // 흰 광 세기
+      contrast: 1.2,  // 결 명암 대비
+      piece: 2.1      // 조각 평균 크기 배율
     }
   };
 
@@ -406,7 +442,7 @@
       seed: (el.id ? el.id.length * 0.73 : 0) + 1.37,
       speed: 1.0,
       maxDpr: 1.75,
-      flow: -40, flowVar: 26, streak: 1.0, sheen: 1.0, contrast: 1.0
+      flow: -40, flowVar: 35, streak: 1.0, sheen: 1.0, contrast: 1.0, piece: 1.0, variance: 1.0
     }, preset, opts || {});
     o.style = style;
     o.tint = normTint(o.tint) || preset.tint;
@@ -452,7 +488,7 @@
 
     var U = {};
     ['uRes', 'uTime', 'uPointer', 'uScale', 'uThick', 'uLayers', 'uIrid', 'uSeed', 'uExposure', 'uTint',
-     'uFlow', 'uFlowVar', 'uStreak', 'uSheen', 'uContrast']
+     'uFlow', 'uFlowVar', 'uStreak', 'uSheen', 'uContrast', 'uPiece', 'uVar']
       .forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
 
     bindPointer();
@@ -496,6 +532,8 @@
       gl.uniform1f(U.uStreak, o.streak);
       gl.uniform1f(U.uSheen, o.sheen);
       gl.uniform1f(U.uContrast, o.contrast);
+      gl.uniform1f(U.uPiece, Math.max(o.piece, 0.05));
+      gl.uniform1f(U.uVar, o.variance);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       raf = requestAnimationFrame(frame);
     }
@@ -653,7 +691,7 @@
   function auto() {
     Array.prototype.forEach.call(document.querySelectorAll('[data-nacre]'), function (el) {
       var o = pick(el.dataset, ['scale', 'thickness', 'layers', 'iridescence', 'seed', 'exposure',
-        'flow', 'flowVar', 'streak', 'sheen', 'contrast']);
+        'flow', 'flowVar', 'streak', 'sheen', 'contrast', 'piece', 'variance']);
       if (el.dataset.style) o.style = el.dataset.style;
       if (el.dataset.tint) o.tint = el.dataset.tint;
       attach(el, o);
