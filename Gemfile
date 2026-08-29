@@ -6,6 +6,9 @@ source "https://rubygems.org"
 
 gem "jekyll", "~> 4.4.1"
 
+# Ruby 4.0 dropped logger from the default gems; Jekyll 4.4 still requires it
+gem "logger"
+
 group :jekyll_plugins do
   gem "jekyll-feed"
 end
@@ -16,6 +19,5 @@ platforms :mingw, :x64_mingw, :mswin, :jruby do
 end
 
 gem "wdm", "~> 0.1", :platforms => [:mingw, :x64_mingw, :mswin]
-gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 gem "webrick", "~> 1.8"

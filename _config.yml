@@ -3,17 +3,12 @@ email: james09756@gmail.com
 description: >-
   KAIST undergraduate student exploring how technology can enhance human wisdom
 baseurl: ""
-url: "https://memorialStar.github.io"
+url: "https://www.youngminjung.com"
 
 # Build settings
 markdown: kramdown
 plugins:
   - jekyll-feed
-
-# Sass
-sass:
-  sass_dir: _sass
-  style: compressed
 
 # Exclude files from processing
 exclude:
@@ -24,3 +19,4 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor/
+  - experiments/
